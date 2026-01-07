@@ -2,6 +2,9 @@
 // Calendar Base Styles
 // Uses CSS variables for complete styling customization
 //
+// Import this file in your global styles to enable calendar styling:
+// @use 'ng-hub-ui-calendar/src/lib/styles/base.scss' as calendarBase;
+//
 $calendarPrefix: hub- !default;
 
 .hub-calendar {
