@@ -1,0 +1,194 @@
+<div class="hub-calendar">
+	<!-- Header -->
+	<div class="hub-calendar__header">
+		<div class="hub-calendar__nav">
+			<button type="button" class="hub-calendar__btn hub-calendar__btn--nav" (click)="previous()">
+				<span class="hub-calendar__icon">◀</span>
+			</button>
+			<button type="button" class="hub-calendar__btn hub-calendar__btn--today" (click)="goToToday()">Today</button>
+			<button type="button" class="hub-calendar__btn hub-calendar__btn--nav" (click)="next()">
+				<span class="hub-calendar__icon">▶</span>
+			</button>
+		</div>
+
+		<h2 class="hub-calendar__title">
+			@switch (view()) { @case ('year') {
+			{{ currentYear() }}
+			} @default {
+			{{ currentMonthName() }} {{ currentYear() }}
+			} }
+		</h2>
+
+		<div class="hub-calendar__views">
+			@for (v of mergedConfig().availableViews; track v) {
+			<button
+				type="button"
+				class="hub-calendar__btn"
+				[class.hub-calendar__btn--active]="view() === v"
+				(click)="setView(v)"
+			>
+				{{ v | titlecase }}
+			</button>
+			}
+		</div>
+	</div>
+
+	<!-- Month View -->
+	@if (view() === 'month') {
+	<div class="hub-calendar__month">
+		<div class="hub-calendar__weekdays">
+			@for (day of weekdayLabels(); track day) {
+			<div class="hub-calendar__weekday">{{ day }}</div>
+			}
+		</div>
+		<div class="hub-calendar__weeks">
+			@for (week of weeks(); track $index) {
+			<div class="hub-calendar__week">
+				@for (day of week.days; track day.date.getTime()) {
+				<div
+					class="hub-calendar__day"
+					[class.hub-calendar__day--today]="day.isToday"
+					[class.hub-calendar__day--other-month]="!day.isCurrentMonth"
+					[class.hub-calendar__day--weekend]="day.isWeekend"
+					[class.hub-calendar__day--selected]="day.isSelected"
+					(click)="onDayClick(day)"
+					cdkDropList
+					[cdkDropListData]="day"
+					(cdkDropListDropped)="onEventDrop($event)"
+				>
+					@if (dayCellTemplate()) {
+					<ng-container *ngTemplateOutlet="dayCellTemplate(); context: { day: day }"></ng-container>
+					} @else {
+					<span class="hub-calendar__day-number">{{ day.date | date : 'd' }}</span>
+					<div class="hub-calendar__events">
+						@for (event of day.events.slice(0, 3); track event.id || $index) {
+						<div
+							class="hub-calendar__event"
+							[class]="getEventClass(event)"
+							(click)="onEventClick(event, $event)"
+							cdkDrag
+							[cdkDragData]="event"
+						>
+							@if (eventTemplate()) {
+							<ng-container *ngTemplateOutlet="eventTemplate(); context: { event: event }"></ng-container>
+							} @else {
+							<span class="hub-calendar__event-title">{{ event.title }}</span>
+							}
+						</div>
+						} @if (day.events.length > 3) {
+						<span class="hub-calendar__more">+{{ day.events.length - 3 }} more</span>
+						}
+					</div>
+					}
+				</div>
+				}
+			</div>
+			}
+		</div>
+	</div>
+	}
+
+	<!-- Week View -->
+	@if (view() === 'week') {
+	<div class="hub-calendar__week-view">
+		<div class="hub-calendar__time-grid">
+			<div class="hub-calendar__time-column">
+				@for (hour of hours(); track hour) {
+				<div class="hub-calendar__time-slot">{{ hour }}:00</div>
+				}
+			</div>
+			@for (day of weekDays(); track day.date.getTime()) {
+			<div
+				class="hub-calendar__day-column"
+				[class.hub-calendar__day-column--today]="day.isToday"
+				[class.hub-calendar__day-column--weekend]="day.isWeekend"
+				cdkDropList
+				[cdkDropListData]="day"
+				(cdkDropListDropped)="onEventDrop($event)"
+			>
+				<div class="hub-calendar__day-header">
+					<span class="hub-calendar__day-name">{{ day.date | date : 'EEE' }}</span>
+					<span class="hub-calendar__day-number">{{ day.date | date : 'd' }}</span>
+				</div>
+				<div class="hub-calendar__day-events">
+					@for (event of day.events; track event.id || $index) {
+					<div
+						class="hub-calendar__event"
+						[class]="getEventClass(event)"
+						(click)="onEventClick(event, $event)"
+						cdkDrag
+						[cdkDragData]="event"
+					>
+						@if (eventTemplate()) {
+						<ng-container *ngTemplateOutlet="eventTemplate(); context: { event: event }"></ng-container>
+						} @else {
+						<span class="hub-calendar__event-title">{{ event.title }}</span>
+						}
+					</div>
+					}
+				</div>
+			</div>
+			}
+		</div>
+	</div>
+	}
+
+	<!-- Day View -->
+	@if (view() === 'day') {
+	<div class="hub-calendar__day-view">
+		<div class="hub-calendar__day-header">
+			<h3>{{ currentDay().date | date : 'EEEE, MMMM d, y' }}</h3>
+		</div>
+		<div class="hub-calendar__time-grid">
+			<div class="hub-calendar__time-column">
+				@for (hour of hours(); track hour) {
+				<div class="hub-calendar__time-slot">{{ hour }}:00</div>
+				}
+			</div>
+			<div
+				class="hub-calendar__day-column"
+				cdkDropList
+				[cdkDropListData]="currentDay()"
+				(cdkDropListDropped)="onEventDrop($event)"
+			>
+				@for (event of currentDay().events; track event.id || $index) {
+				<div
+					class="hub-calendar__event"
+					[class]="getEventClass(event)"
+					(click)="onEventClick(event, $event)"
+					cdkDrag
+					[cdkDragData]="event"
+				>
+					@if (eventTemplate()) {
+					<ng-container *ngTemplateOutlet="eventTemplate(); context: { event: event }"></ng-container>
+					} @else {
+					<div class="hub-calendar__event-content">
+						<span class="hub-calendar__event-title">{{ event.title }}</span>
+						@if (event.description) {
+						<span class="hub-calendar__event-desc">{{ event.description }}</span>
+						}
+					</div>
+					}
+				</div>
+				}
+			</div>
+		</div>
+	</div>
+	}
+
+	<!-- Year View -->
+	@if (view() === 'year') {
+	<div class="hub-calendar__year-view">
+		<div class="hub-calendar__months-grid">
+			@for (month of months(); track month.date.getTime()) {
+			<div class="hub-calendar__month-card" (click)="onMonthClick(month.date)">
+				<span class="hub-calendar__month-name">{{ month.name }}</span>
+				@if (month.eventCount > 0) {
+				<span class="hub-calendar__month-events">{{ month.eventCount }} events</span>
+				}
+			</div>
+			}
+		</div>
+	</div>
+	}
+</div>
