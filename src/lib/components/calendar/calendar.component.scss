@@ -1,22 +1,81 @@
+//
+// Calendar Base Styles
+// Uses CSS variables for complete styling customization
+//
+$calendarPrefix: hub- !default;
+
 .hub-calendar {
+	// scss-docs-start calendar-css-vars
+	--#{$calendarPrefix}calendar-bg: #ffffff;
+	--#{$calendarPrefix}calendar-color: #1f2937;
+	--#{$calendarPrefix}calendar-border-color: #e5e7eb;
+	--#{$calendarPrefix}calendar-border-radius: 0.5rem;
+	--#{$calendarPrefix}calendar-font-family: system-ui, -apple-system, sans-serif;
+
+	// Header
+	--#{$calendarPrefix}calendar-header-bg: #f9fafb;
+	--#{$calendarPrefix}calendar-header-padding: 1rem;
+
+	// Buttons
+	--#{$calendarPrefix}calendar-btn-bg: #ffffff;
+	--#{$calendarPrefix}calendar-btn-color: inherit;
+	--#{$calendarPrefix}calendar-btn-border-color: #e5e7eb;
+	--#{$calendarPrefix}calendar-btn-border-radius: 0.375rem;
+	--#{$calendarPrefix}calendar-btn-padding-x: 1rem;
+	--#{$calendarPrefix}calendar-btn-padding-y: 0.5rem;
+	--#{$calendarPrefix}calendar-btn-hover-bg: #f3f4f6;
+	--#{$calendarPrefix}calendar-btn-active-bg: #3b82f6;
+	--#{$calendarPrefix}calendar-btn-active-color: #ffffff;
+
+	// Day cells
+	--#{$calendarPrefix}calendar-day-padding: 0.5rem;
+	--#{$calendarPrefix}calendar-day-min-height: 80px;
+	--#{$calendarPrefix}calendar-day-hover-bg: #f3f4f6;
+	--#{$calendarPrefix}calendar-day-today-bg: #eff6ff;
+	--#{$calendarPrefix}calendar-day-other-month-bg: #f9fafb;
+	--#{$calendarPrefix}calendar-day-other-month-color: #9ca3af;
+	--#{$calendarPrefix}calendar-day-weekend-bg: #fafafa;
+	--#{$calendarPrefix}calendar-day-selected-bg: #dbeafe;
+	--#{$calendarPrefix}calendar-day-drag-over-bg: #bfdbfe;
+
+	// Events
+	--#{$calendarPrefix}calendar-event-bg: #3b82f6;
+	--#{$calendarPrefix}calendar-event-color: #ffffff;
+	--#{$calendarPrefix}calendar-event-border-radius: 0.25rem;
+	--#{$calendarPrefix}calendar-event-padding-x: 0.5rem;
+	--#{$calendarPrefix}calendar-event-padding-y: 0.25rem;
+	--#{$calendarPrefix}calendar-event-font-size: 0.75rem;
+
+	// Month cards (year view)
+	--#{$calendarPrefix}calendar-month-card-bg: #f9fafb;
+	--#{$calendarPrefix}calendar-month-card-hover-bg: #f3f4f6;
+	--#{$calendarPrefix}calendar-month-card-padding: 1.5rem;
+
+	// Colors
+	--#{$calendarPrefix}calendar-primary: #3b82f6;
+	--#{$calendarPrefix}calendar-muted: #6b7280;
+	// scss-docs-end calendar-css-vars
+
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	font-family: system-ui, -apple-system, sans-serif;
-	background: var(--calendar-bg, #ffffff);
-	color: var(--calendar-color, #1f2937);
-	border-radius: var(--calendar-border-radius, 0.5rem);
-	border: 1px solid var(--calendar-border-color, #e5e7eb);
+	font-family: var(--#{$calendarPrefix}calendar-font-family);
+	background: var(--#{$calendarPrefix}calendar-bg);
+	color: var(--#{$calendarPrefix}calendar-color);
+	border-radius: var(--#{$calendarPrefix}calendar-border-radius);
+	border: 1px solid var(--#{$calendarPrefix}calendar-border-color);
 	overflow: hidden;
 
-	// Header
+	// =========================================================================
+	// HEADER
+	// =========================================================================
 	&__header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 1rem;
-		border-bottom: 1px solid var(--calendar-border-color, #e5e7eb);
-		background: var(--calendar-header-bg, #f9fafb);
+		padding: var(--#{$calendarPrefix}calendar-header-padding);
+		border-bottom: 1px solid var(--#{$calendarPrefix}calendar-border-color);
+		background: var(--#{$calendarPrefix}calendar-header-bg);
 	}
 
 	&__nav {
@@ -35,27 +94,31 @@
 		gap: 0.25rem;
 	}
 
+	// =========================================================================
+	// BUTTONS
+	// =========================================================================
 	&__btn {
-		padding: 0.5rem 1rem;
-		border: 1px solid var(--calendar-border-color, #e5e7eb);
-		background: var(--calendar-btn-bg, #ffffff);
-		border-radius: 0.375rem;
+		padding: var(--#{$calendarPrefix}calendar-btn-padding-y) var(--#{$calendarPrefix}calendar-btn-padding-x);
+		border: 1px solid var(--#{$calendarPrefix}calendar-btn-border-color);
+		background: var(--#{$calendarPrefix}calendar-btn-bg);
+		color: var(--#{$calendarPrefix}calendar-btn-color);
+		border-radius: var(--#{$calendarPrefix}calendar-btn-border-radius);
 		cursor: pointer;
 		font-size: 0.875rem;
 		transition: all 0.15s ease;
 
 		&:hover {
-			background: var(--calendar-btn-hover-bg, #f3f4f6);
+			background: var(--#{$calendarPrefix}calendar-btn-hover-bg);
 		}
 
 		&--active {
-			background: var(--calendar-primary, #3b82f6);
-			color: white;
-			border-color: var(--calendar-primary, #3b82f6);
+			background: var(--#{$calendarPrefix}calendar-btn-active-bg);
+			color: var(--#{$calendarPrefix}calendar-btn-active-color);
+			border-color: var(--#{$calendarPrefix}calendar-btn-active-bg);
 		}
 
 		&--nav {
-			padding: 0.5rem 0.75rem;
+			padding: var(--#{$calendarPrefix}calendar-btn-padding-y) 0.75rem;
 		}
 	}
 
@@ -63,7 +126,9 @@
 		font-size: 0.75rem;
 	}
 
-	// Month View
+	// =========================================================================
+	// MONTH VIEW
+	// =========================================================================
 	&__month {
 		flex: 1;
 		display: flex;
@@ -74,8 +139,8 @@
 	&__weekdays {
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
-		border-bottom: 1px solid var(--calendar-border-color, #e5e7eb);
-		background: var(--calendar-header-bg, #f9fafb);
+		border-bottom: 1px solid var(--#{$calendarPrefix}calendar-border-color);
+		background: var(--#{$calendarPrefix}calendar-header-bg);
 	}
 
 	&__weekday {
@@ -84,7 +149,7 @@
 		font-weight: 600;
 		font-size: 0.75rem;
 		text-transform: uppercase;
-		color: var(--calendar-muted, #6b7280);
+		color: var(--#{$calendarPrefix}calendar-muted);
 	}
 
 	&__weeks {
@@ -100,40 +165,47 @@
 		min-height: 100px;
 	}
 
+	// =========================================================================
+	// DAY CELLS
+	// =========================================================================
 	&__day {
-		padding: 0.5rem;
-		border-right: 1px solid var(--calendar-border-color, #e5e7eb);
-		border-bottom: 1px solid var(--calendar-border-color, #e5e7eb);
+		padding: var(--#{$calendarPrefix}calendar-day-padding);
+		border-right: 1px solid var(--#{$calendarPrefix}calendar-border-color);
+		border-bottom: 1px solid var(--#{$calendarPrefix}calendar-border-color);
 		cursor: pointer;
 		transition: background 0.15s ease;
 		display: flex;
 		flex-direction: column;
 		gap: 0.25rem;
-		min-height: 80px;
+		min-height: var(--#{$calendarPrefix}calendar-day-min-height);
 
 		&:last-child {
 			border-right: none;
 		}
 
 		&:hover {
-			background: var(--calendar-hover-bg, #f3f4f6);
+			background: var(--#{$calendarPrefix}calendar-day-hover-bg);
 		}
 
 		&--today {
-			background: var(--calendar-today-bg, #eff6ff);
+			background: var(--#{$calendarPrefix}calendar-day-today-bg);
 		}
 
 		&--other-month {
-			color: var(--calendar-muted, #9ca3af);
-			background: var(--calendar-other-month-bg, #f9fafb);
+			color: var(--#{$calendarPrefix}calendar-day-other-month-color);
+			background: var(--#{$calendarPrefix}calendar-day-other-month-bg);
 		}
 
 		&--weekend {
-			background: var(--calendar-weekend-bg, #fafafa);
+			background: var(--#{$calendarPrefix}calendar-day-weekend-bg);
 		}
 
 		&--selected {
-			background: var(--calendar-selected-bg, #dbeafe);
+			background: var(--#{$calendarPrefix}calendar-day-selected-bg);
+		}
+
+		&--drag-over {
+			background: var(--#{$calendarPrefix}calendar-day-drag-over-bg);
 		}
 	}
 
@@ -142,7 +214,9 @@
 		font-size: 0.875rem;
 	}
 
-	// Events
+	// =========================================================================
+	// EVENTS
+	// =========================================================================
 	&__events {
 		display: flex;
 		flex-direction: column;
@@ -151,11 +225,11 @@
 	}
 
 	&__event {
-		padding: 0.25rem 0.5rem;
-		font-size: 0.75rem;
-		background: var(--calendar-event-bg, #3b82f6);
-		color: var(--calendar-event-color, white);
-		border-radius: 0.25rem;
+		padding: var(--#{$calendarPrefix}calendar-event-padding-y) var(--#{$calendarPrefix}calendar-event-padding-x);
+		font-size: var(--#{$calendarPrefix}calendar-event-font-size);
+		background: var(--#{$calendarPrefix}calendar-event-bg);
+		color: var(--#{$calendarPrefix}calendar-event-color);
+		border-radius: var(--#{$calendarPrefix}calendar-event-border-radius);
 		cursor: pointer;
 		white-space: nowrap;
 		overflow: hidden;
@@ -164,25 +238,58 @@
 		&:hover {
 			opacity: 0.9;
 		}
+
+		&[draggable='true'] {
+			cursor: grab;
+
+			&:active {
+				cursor: grabbing;
+			}
+		}
 	}
 
 	&__event-title {
 		font-weight: 500;
 	}
 
+	&__event-content {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	&__event-desc {
+		font-size: 0.625rem;
+		opacity: 0.8;
+	}
+
 	&__more {
 		font-size: 0.625rem;
-		color: var(--calendar-muted, #6b7280);
+		color: var(--#{$calendarPrefix}calendar-muted);
 		text-align: center;
 	}
 
-	// Week/Day View
+	// =========================================================================
+	// WEEK / DAY VIEW
+	// =========================================================================
 	&__week-view,
 	&__day-view {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
 		overflow: auto;
+	}
+
+	&__day-view-header {
+		padding: var(--#{$calendarPrefix}calendar-header-padding);
+		background: var(--#{$calendarPrefix}calendar-header-bg);
+		border-bottom: 1px solid var(--#{$calendarPrefix}calendar-border-color);
+
+		h3 {
+			margin: 0;
+			font-size: 1rem;
+			font-weight: 600;
+		}
 	}
 
 	&__time-grid {
@@ -193,32 +300,37 @@
 	&__time-column {
 		width: 60px;
 		flex-shrink: 0;
-		border-right: 1px solid var(--calendar-border-color, #e5e7eb);
+		border-right: 1px solid var(--#{$calendarPrefix}calendar-border-color);
 	}
 
 	&__time-slot {
 		height: 60px;
 		padding: 0.25rem;
 		font-size: 0.75rem;
-		color: var(--calendar-muted, #6b7280);
-		border-bottom: 1px solid var(--calendar-border-color, #e5e7eb);
+		color: var(--#{$calendarPrefix}calendar-muted);
+		border-bottom: 1px solid var(--#{$calendarPrefix}calendar-border-color);
 	}
 
 	&__day-column {
 		flex: 1;
-		border-right: 1px solid var(--calendar-border-color, #e5e7eb);
+		border-right: 1px solid var(--#{$calendarPrefix}calendar-border-color);
 		position: relative;
+		transition: background 0.15s ease;
 
 		&:last-child {
 			border-right: none;
 		}
 
 		&--today {
-			background: var(--calendar-today-bg, #eff6ff);
+			background: var(--#{$calendarPrefix}calendar-day-today-bg);
 		}
 
 		&--weekend {
-			background: var(--calendar-weekend-bg, #fafafa);
+			background: var(--#{$calendarPrefix}calendar-day-weekend-bg);
+		}
+
+		&--full {
+			flex: 1;
 		}
 	}
 
@@ -227,14 +339,14 @@
 		flex-direction: column;
 		align-items: center;
 		padding: 0.5rem;
-		border-bottom: 1px solid var(--calendar-border-color, #e5e7eb);
-		background: var(--calendar-header-bg, #f9fafb);
+		border-bottom: 1px solid var(--#{$calendarPrefix}calendar-border-color);
+		background: var(--#{$calendarPrefix}calendar-header-bg);
 	}
 
 	&__day-name {
 		font-size: 0.625rem;
 		text-transform: uppercase;
-		color: var(--calendar-muted, #6b7280);
+		color: var(--#{$calendarPrefix}calendar-muted);
 	}
 
 	&__day-events {
@@ -244,7 +356,9 @@
 		gap: 0.25rem;
 	}
 
-	// Year View
+	// =========================================================================
+	// YEAR VIEW
+	// =========================================================================
 	&__year-view {
 		flex: 1;
 		padding: 1rem;
@@ -258,17 +372,17 @@
 	}
 
 	&__month-card {
-		padding: 1.5rem;
+		padding: var(--#{$calendarPrefix}calendar-month-card-padding);
 		text-align: center;
-		background: var(--calendar-card-bg, #f9fafb);
-		border-radius: 0.5rem;
-		border: 1px solid var(--calendar-border-color, #e5e7eb);
+		background: var(--#{$calendarPrefix}calendar-month-card-bg);
+		border-radius: var(--#{$calendarPrefix}calendar-border-radius);
+		border: 1px solid var(--#{$calendarPrefix}calendar-border-color);
 		cursor: pointer;
 		transition: all 0.15s ease;
 
 		&:hover {
-			background: var(--calendar-hover-bg, #f3f4f6);
-			border-color: var(--calendar-primary, #3b82f6);
+			background: var(--#{$calendarPrefix}calendar-month-card-hover-bg);
+			border-color: var(--#{$calendarPrefix}calendar-primary);
 		}
 	}
 
@@ -282,15 +396,6 @@
 		display: block;
 		margin-top: 0.5rem;
 		font-size: 0.75rem;
-		color: var(--calendar-muted, #6b7280);
+		color: var(--#{$calendarPrefix}calendar-muted);
 	}
-}
-
-// Drag preview
-.cdk-drag-preview {
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.cdk-drag-placeholder {
-	opacity: 0.3;
 }

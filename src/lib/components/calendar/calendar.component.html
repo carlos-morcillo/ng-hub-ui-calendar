@@ -52,9 +52,10 @@
 					[class.hub-calendar__day--weekend]="day.isWeekend"
 					[class.hub-calendar__day--selected]="day.isSelected"
 					(click)="onDayClick(day)"
-					cdkDropList
-					[cdkDropListData]="day"
-					(cdkDropListDropped)="onEventDrop($event)"
+					(dragover)="onDragOver($event)"
+					(dragenter)="onDragEnter($event)"
+					(dragleave)="onDragLeave($event)"
+					(drop)="onDrop(day, $event)"
 				>
 					@if (dayCellTemplate()) {
 					<ng-container *ngTemplateOutlet="dayCellTemplate(); context: { day: day }"></ng-container>
@@ -65,9 +66,10 @@
 						<div
 							class="hub-calendar__event"
 							[class]="getEventClass(event)"
+							[attr.draggable]="mergedConfig().dragAndDropEnabled"
 							(click)="onEventClick(event, $event)"
-							cdkDrag
-							[cdkDragData]="event"
+							(dragstart)="onDragStart(event, $event)"
+							(dragend)="onDragEnd($event)"
 						>
 							@if (eventTemplate()) {
 							<ng-container *ngTemplateOutlet="eventTemplate(); context: { event: event }"></ng-container>
@@ -102,9 +104,10 @@
 				class="hub-calendar__day-column"
 				[class.hub-calendar__day-column--today]="day.isToday"
 				[class.hub-calendar__day-column--weekend]="day.isWeekend"
-				cdkDropList
-				[cdkDropListData]="day"
-				(cdkDropListDropped)="onEventDrop($event)"
+				(dragover)="onDragOver($event)"
+				(dragenter)="onDragEnter($event)"
+				(dragleave)="onDragLeave($event)"
+				(drop)="onDrop(day, $event)"
 			>
 				<div class="hub-calendar__day-header">
 					<span class="hub-calendar__day-name">{{ day.date | date : 'EEE' }}</span>
@@ -115,9 +118,10 @@
 					<div
 						class="hub-calendar__event"
 						[class]="getEventClass(event)"
+						[attr.draggable]="mergedConfig().dragAndDropEnabled"
 						(click)="onEventClick(event, $event)"
-						cdkDrag
-						[cdkDragData]="event"
+						(dragstart)="onDragStart(event, $event)"
+						(dragend)="onDragEnd($event)"
 					>
 						@if (eventTemplate()) {
 						<ng-container *ngTemplateOutlet="eventTemplate(); context: { event: event }"></ng-container>
@@ -136,7 +140,7 @@
 	<!-- Day View -->
 	@if (view() === 'day') {
 	<div class="hub-calendar__day-view">
-		<div class="hub-calendar__day-header">
+		<div class="hub-calendar__day-view-header">
 			<h3>{{ currentDay().date | date : 'EEEE, MMMM d, y' }}</h3>
 		</div>
 		<div class="hub-calendar__time-grid">
@@ -146,18 +150,20 @@
 				}
 			</div>
 			<div
-				class="hub-calendar__day-column"
-				cdkDropList
-				[cdkDropListData]="currentDay()"
-				(cdkDropListDropped)="onEventDrop($event)"
+				class="hub-calendar__day-column hub-calendar__day-column--full"
+				(dragover)="onDragOver($event)"
+				(dragenter)="onDragEnter($event)"
+				(dragleave)="onDragLeave($event)"
+				(drop)="onDrop(currentDay(), $event)"
 			>
 				@for (event of currentDay().events; track event.id || $index) {
 				<div
 					class="hub-calendar__event"
 					[class]="getEventClass(event)"
+					[attr.draggable]="mergedConfig().dragAndDropEnabled"
 					(click)="onEventClick(event, $event)"
-					cdkDrag
-					[cdkDragData]="event"
+					(dragstart)="onDragStart(event, $event)"
+					(dragend)="onDragEnd($event)"
 				>
 					@if (eventTemplate()) {
 					<ng-container *ngTemplateOutlet="eventTemplate(); context: { event: event }"></ng-container>
