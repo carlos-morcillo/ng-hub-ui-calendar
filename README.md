@@ -10,13 +10,10 @@ A powerful, flexible calendar component for Angular applications with multiple v
 This library is part of the **Hub UI** ecosystem:
 
 -   [**ng-hub-ui-accordion**](https://www.npmjs.com/package/ng-hub-ui-accordion)
--   [**ng-hub-ui-action-sheet**](https://www.npmjs.com/package/ng-hub-ui-action-sheet)
 -   [**ng-hub-ui-avatar**](https://www.npmjs.com/package/ng-hub-ui-avatar)
 -   [**ng-hub-ui-board**](https://www.npmjs.com/package/ng-hub-ui-board)
 -   [**ng-hub-ui-breadcrumbs**](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
 -   [**ng-hub-ui-calendar**](https://www.npmjs.com/package/ng-hub-ui-calendar) ← You are here
--   [**ng-hub-ui-dropdown**](https://www.npmjs.com/package/ng-hub-ui-dropdown)
--   [**ng-hub-ui-list**](https://www.npmjs.com/package/ng-hub-ui-list)
 -   [**ng-hub-ui-modal**](https://www.npmjs.com/package/ng-hub-ui-modal)
 -   [**ng-hub-ui-paginable**](https://www.npmjs.com/package/ng-hub-ui-paginable)
 -   [**ng-hub-ui-portal**](https://www.npmjs.com/package/ng-hub-ui-portal)
