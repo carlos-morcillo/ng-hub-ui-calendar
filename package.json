@@ -1,11 +1,11 @@
 {
 	"name": "ng-hub-ui-calendar",
-	"version": "19.0.1",
+	"version": "19.0.2",
 	"description": "Calendar component for Angular applications with multiple views, native drag-and-drop, and event management",
 	"peerDependencies": {
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
-		"ng-hub-ui-utils": "^19.0.0"
+		"ng-hub-ui-utils": "^1.2.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"
