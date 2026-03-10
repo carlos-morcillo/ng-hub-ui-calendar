@@ -1,6 +1,5 @@
-<div class="hub-calendar">
-	<!-- Header -->
-	<div class="hub-calendar__header">
+<!-- Header -->
+<div class="hub-calendar__header">
 		<div class="hub-calendar__nav">
 			<button type="button" class="hub-calendar__btn hub-calendar__btn--nav" (click)="previous()">
 				<span class="hub-calendar__icon">◀</span>
@@ -33,8 +32,8 @@
 		</div>
 	</div>
 
-	<!-- Month View -->
-	@if (view() === 'month') {
+<!-- Month View -->
+@if (view() === 'month') {
 	<div class="hub-calendar__month">
 		<div class="hub-calendar__weekdays">
 			@for (day of weekdayLabels(); track day) {
@@ -88,10 +87,10 @@
 			}
 		</div>
 	</div>
-	}
+}
 
-	<!-- Week View -->
-	@if (view() === 'week') {
+<!-- Week View -->
+@if (view() === 'week') {
 	<div class="hub-calendar__week-view">
 		<div class="hub-calendar__time-grid">
 			<div class="hub-calendar__time-column">
@@ -135,10 +134,10 @@
 			}
 		</div>
 	</div>
-	}
+}
 
-	<!-- Day View -->
-	@if (view() === 'day') {
+<!-- Day View -->
+@if (view() === 'day') {
 	<div class="hub-calendar__day-view">
 		<div class="hub-calendar__day-view-header">
 			<h3>{{ currentDay().date | date : 'EEEE, MMMM d, y' }}</h3>
@@ -180,10 +179,10 @@
 			</div>
 		</div>
 	</div>
-	}
+}
 
-	<!-- Year View -->
-	@if (view() === 'year') {
+<!-- Year View -->
+@if (view() === 'year') {
 	<div class="hub-calendar__year-view">
 		<div class="hub-calendar__months-grid">
 			@for (month of months(); track month.date.getTime()) {
@@ -196,5 +195,4 @@
 			}
 		</div>
 	</div>
-	}
-</div>
+}

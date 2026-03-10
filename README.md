@@ -3,51 +3,59 @@
 [![npm version](https://img.shields.io/npm/v/ng-hub-ui-calendar.svg)](https://www.npmjs.com/package/ng-hub-ui-calendar)
 [![license](https://img.shields.io/npm/l/ng-hub-ui-calendar.svg)](https://github.com/carlos-morcillo/ng-hub-ui-calendar/blob/main/LICENSE)
 
+> **⚠️ CRITICAL (MAJOR RELEASE):** Version 21.0.0 introduces architectural breaking changes via an SCSS refactor prefixing internal variables to standard (`--hub-calendar-*`). Please read the [BREAKING_CHANGES.md](./BREAKING_CHANGES.md) file before upgrading.
+
 A powerful, flexible calendar component for Angular applications with multiple views, native drag-and-drop event rescheduling, custom templates, and full internationalization support.
 
 ## 🧩 Library Family `ng-hub-ui`
 
 This library is part of the **Hub UI** ecosystem:
 
--   [**ng-hub-ui-accordion**](https://www.npmjs.com/package/ng-hub-ui-accordion)
--   [**ng-hub-ui-avatar**](https://www.npmjs.com/package/ng-hub-ui-avatar)
--   [**ng-hub-ui-board**](https://www.npmjs.com/package/ng-hub-ui-board)
--   [**ng-hub-ui-breadcrumbs**](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
--   [**ng-hub-ui-calendar**](https://www.npmjs.com/package/ng-hub-ui-calendar) ← You are here
--   [**ng-hub-ui-modal**](https://www.npmjs.com/package/ng-hub-ui-modal)
--   [**ng-hub-ui-paginable**](https://www.npmjs.com/package/ng-hub-ui-paginable)
--   [**ng-hub-ui-portal**](https://www.npmjs.com/package/ng-hub-ui-portal)
--   [**ng-hub-ui-stepper**](https://www.npmjs.com/package/ng-hub-ui-stepper)
--   [**ng-hub-ui-utils**](https://www.npmjs.com/package/ng-hub-ui-utils)
+- [**ng-hub-ui-accordion**](https://www.npmjs.com/package/ng-hub-ui-accordion)
+- [**ng-hub-ui-avatar**](https://www.npmjs.com/package/ng-hub-ui-avatar)
+- [**ng-hub-ui-board**](https://www.npmjs.com/package/ng-hub-ui-board)
+- [**ng-hub-ui-breadcrumbs**](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
+- [**ng-hub-ui-calendar**](https://www.npmjs.com/package/ng-hub-ui-calendar) ← You are here
+- [**ng-hub-ui-modal**](https://www.npmjs.com/package/ng-hub-ui-modal)
+- [**ng-hub-ui-paginable**](https://www.npmjs.com/package/ng-hub-ui-paginable)
+- [**ng-hub-ui-portal**](https://www.npmjs.com/package/ng-hub-ui-portal)
+- [**ng-hub-ui-stepper**](https://www.npmjs.com/package/ng-hub-ui-stepper)
+- [**ng-hub-ui-utils**](https://www.npmjs.com/package/ng-hub-ui-utils)
 
 ## 📑 Table of Contents
 
--   [Features](#-features)
--   [Installation](#-installation)
--   [Quick Start](#-quick-start)
--   [Examples](#-examples)
-    -   [Basic Calendar](#basic-calendar)
-    -   [View Types](#view-types)
-    -   [Custom Templates](#custom-templates)
-    -   [Drag and Drop](#drag-and-drop)
-    -   [Configuration](#configuration)
-    -   [Internationalization](#internationalization)
-    -   [Event Handling](#event-handling)
--   [API Reference](#-api-reference)
--   [Styling](#-styling)
--   [Support & License](#-support--license)
+- [ng-hub-ui-calendar](#ng-hub-ui-calendar)
+    - [🧩 Library Family `ng-hub-ui`](#-library-family-ng-hub-ui)
+    - [📑 Table of Contents](#-table-of-contents)
+    - [✨ Features](#-features)
+    - [📦 Installation](#-installation)
+    - [🚀 Quick Start](#-quick-start)
+    - [📚 Examples](#-examples)
+        - [Basic Calendar](#basic-calendar)
+        - [View Types](#view-types)
+        - [Custom Templates](#custom-templates)
+        - [Drag and Drop](#drag-and-drop)
+        - [Configuration](#configuration)
+        - [Internationalization](#internationalization)
+        - [Event Handling](#event-handling)
+    - [📖 API Reference](#-api-reference)
+        - [Inputs](#inputs)
+        - [Outputs](#outputs)
+        - [Interfaces](#interfaces)
+    - [🎨 Styling](#-styling)
+    - [📞 Support \& License](#-support--license)
 
 ## ✨ Features
 
--   **Multiple View Types**: Month, Week, Day, and Year views
--   **Native Drag & Drop**: Reschedule events by dragging to different days
--   **Custom Templates**: Full control over event and day cell rendering
--   **Internationalization**: Built-in English and Spanish, extensible for any language
--   **CSS Variables**: Complete styling customization via CSS custom properties
--   **TypeScript**: Full type definitions with CalendarViewType enum
--   **Standalone Components**: Works with modern Angular's standalone architecture
--   **Accessible**: Keyboard navigation and ARIA support
--   **Lightweight**: No external dependencies (native HTML5 drag-and-drop)
+- **Multiple View Types**: Month, Week, Day, and Year views
+- **Native Drag & Drop**: Reschedule events by dragging to different days
+- **Custom Templates**: Full control over event and day cell rendering
+- **Internationalization**: Built-in English and Spanish, extensible for any language
+- **CSS Variables**: Complete styling customization via CSS custom properties
+- **TypeScript**: Full type definitions with CalendarViewType enum
+- **Standalone Components**: Works with modern Angular's standalone architecture
+- **Accessible**: Keyboard navigation and ARIA support
+- **Lightweight**: No external dependencies (native HTML5 drag-and-drop)
 
 ## 📦 Installation
 
@@ -156,9 +164,9 @@ import { HubCalendarComponent, EventTemplateDirective, DayCellTemplateDirective 
 			<!-- Custom Day Cell Template -->
 			<ng-template dayCellTpt let-day="day">
 				<div class="custom-day">
-					<span class="day-number">{{ day.date | date : 'd' }}</span>
+					<span class="day-number">{{ day.date | date: 'd' }}</span>
 					@if (day.events.length > 0) {
-					<span class="badge">{{ day.events.length }}</span>
+						<span class="badge">{{ day.events.length }}</span>
 					}
 				</div>
 			</ng-template>
@@ -352,79 +360,43 @@ interface CalendarConfig {
 
 ## 🎨 Styling
 
-### CSS Variables
+Full CSS variable catalog:
 
-All styling can be customized via CSS variables:
+- [`./docs/css-variables-reference.md`](./docs/css-variables-reference.md)
 
-```css
+Import the stylesheet once in your global styles:
+
+```scss
+@use 'ng-hub-ui-calendar/src/lib/styles/calendar.scss';
+```
+
+Framework-agnostic customization example:
+
+```scss
 hub-calendar {
-	/* Container */
 	--hub-calendar-bg: #ffffff;
-	--hub-calendar-color: #1f2937;
-	--hub-calendar-border-color: #e5e7eb;
-	--hub-calendar-border-radius: 0.5rem;
-	--hub-calendar-font-family: system-ui, -apple-system, sans-serif;
-
-	/* Header */
-	--hub-calendar-header-bg: #f9fafb;
-	--hub-calendar-header-padding: 1rem;
-
-	/* Buttons */
-	--hub-calendar-btn-bg: #ffffff;
-	--hub-calendar-btn-color: inherit;
-	--hub-calendar-btn-border-color: #e5e7eb;
-	--hub-calendar-btn-border-radius: 0.375rem;
-	--hub-calendar-btn-hover-bg: #f3f4f6;
-	--hub-calendar-btn-active-bg: #3b82f6;
-	--hub-calendar-btn-active-color: #ffffff;
-
-	/* Day cells */
-	--hub-calendar-day-padding: 0.5rem;
-	--hub-calendar-day-min-height: 80px;
-	--hub-calendar-day-hover-bg: #f3f4f6;
-	--hub-calendar-day-today-bg: #eff6ff;
-	--hub-calendar-day-other-month-bg: #f9fafb;
-	--hub-calendar-day-other-month-color: #9ca3af;
-	--hub-calendar-day-weekend-bg: #fafafa;
-	--hub-calendar-day-selected-bg: #dbeafe;
-	--hub-calendar-day-drag-over-bg: #bfdbfe;
-
-	/* Events */
-	--hub-calendar-event-bg: #3b82f6;
-	--hub-calendar-event-color: #ffffff;
-	--hub-calendar-event-border-radius: 0.25rem;
-	--hub-calendar-event-font-size: 0.75rem;
-
-	/* Month cards (year view) */
-	--hub-calendar-month-card-bg: #f9fafb;
-	--hub-calendar-month-card-hover-bg: #f3f4f6;
-	--hub-calendar-month-card-padding: 1.5rem;
-
-	/* Colors */
-	--hub-calendar-primary: #3b82f6;
-	--hub-calendar-muted: #6b7280;
+	--hub-calendar-border-color: #d0d7de;
+	--hub-calendar-btn-active-bg: #0d6efd;
+	--hub-calendar-event-bg: #2563eb;
 }
 ```
 
-### CSS Classes
+Bootstrap integration example (optional):
 
-| Class                             | Description                |
-| --------------------------------- | -------------------------- |
-| `.hub-calendar`                   | Root container             |
-| `.hub-calendar__header`           | Top header with navigation |
-| `.hub-calendar__day`              | Day cell container         |
-| `.hub-calendar__day--today`       | Today's date styling       |
-| `.hub-calendar__day--selected`    | Selected day styling       |
-| `.hub-calendar__day--weekend`     | Weekend day styling        |
-| `.hub-calendar__day--other-month` | Days from adjacent months  |
-| `.hub-calendar__event`            | Event element              |
-| `.hub-calendar__month-card`       | Month card in year view    |
+```scss
+hub-calendar {
+	--hub-calendar-bg: var(--bs-body-bg);
+	--hub-calendar-color: var(--bs-body-color);
+	--hub-calendar-border-color: var(--bs-border-color);
+	--hub-calendar-btn-active-bg: var(--bs-primary);
+}
+```
 
 ## 📞 Support & License
 
--   **Issues**: [GitHub Issues](https://github.com/carlos-morcillo/ng-hub-ui-calendar/issues)
--   **Author**: Carlos Morcillo
--   **License**: MIT
+- **Issues**: [GitHub Issues](https://github.com/carlos-morcillo/ng-hub-ui-calendar/issues)
+- **Author**: Carlos Morcillo
+- **License**: MIT
 
 ---
 

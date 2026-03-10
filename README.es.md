@@ -3,6 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/ng-hub-ui-calendar.svg)](https://www.npmjs.com/package/ng-hub-ui-calendar)
 [![license](https://img.shields.io/npm/l/ng-hub-ui-calendar.svg)](https://github.com/carlos-morcillo/ng-hub-ui-calendar/blob/main/LICENSE)
 
+> **⚠️ CRÍTICO (RELEASE MAYOR):** La versión 21.0.0 introduce cambios arquitectónicos en la definición de variables SCSS, refactorizándolas a la convención estándar (`--hub-calendar-*`). Por favor, lea [BREAKING_CHANGES.md](./BREAKING_CHANGES.md) antes de actualizar.
+
 Un componente de calendario potente y flexible para aplicaciones Angular con múltiples vistas, funcionalidad de arrastrar y soltar nativa, plantillas personalizadas y soporte completo de internacionalización.
 
 ## 🧩 Familia de librerías `ng-hub-ui`
@@ -352,73 +354,37 @@ interface CalendarConfig {
 
 ## 🎨 Estilos
 
-### Variables CSS
+Catálogo completo de variables CSS:
 
-Todos los estilos pueden ser personalizados a través de variables CSS:
+- [`./docs/css-variables-reference.md`](./docs/css-variables-reference.md)
 
-```css
+Importa el stylesheet una sola vez en tus estilos globales:
+
+```scss
+@use 'ng-hub-ui-calendar/src/lib/styles/calendar.scss';
+```
+
+Ejemplo agnóstico de framework:
+
+```scss
 hub-calendar {
-	/* Contenedor */
 	--hub-calendar-bg: #ffffff;
-	--hub-calendar-color: #1f2937;
-	--hub-calendar-border-color: #e5e7eb;
-	--hub-calendar-border-radius: 0.5rem;
-	--hub-calendar-font-family: system-ui, -apple-system, sans-serif;
-
-	/* Cabecera */
-	--hub-calendar-header-bg: #f9fafb;
-	--hub-calendar-header-padding: 1rem;
-
-	/* Botones */
-	--hub-calendar-btn-bg: #ffffff;
-	--hub-calendar-btn-color: inherit;
-	--hub-calendar-btn-border-color: #e5e7eb;
-	--hub-calendar-btn-border-radius: 0.375rem;
-	--hub-calendar-btn-hover-bg: #f3f4f6;
-	--hub-calendar-btn-active-bg: #3b82f6;
-	--hub-calendar-btn-active-color: #ffffff;
-
-	/* Celdas de día */
-	--hub-calendar-day-padding: 0.5rem;
-	--hub-calendar-day-min-height: 80px;
-	--hub-calendar-day-hover-bg: #f3f4f6;
-	--hub-calendar-day-today-bg: #eff6ff;
-	--hub-calendar-day-other-month-bg: #f9fafb;
-	--hub-calendar-day-other-month-color: #9ca3af;
-	--hub-calendar-day-weekend-bg: #fafafa;
-	--hub-calendar-day-selected-bg: #dbeafe;
-	--hub-calendar-day-drag-over-bg: #bfdbfe;
-
-	/* Eventos */
-	--hub-calendar-event-bg: #3b82f6;
-	--hub-calendar-event-color: #ffffff;
-	--hub-calendar-event-border-radius: 0.25rem;
-	--hub-calendar-event-font-size: 0.75rem;
-
-	/* Tarjetas de mes (vista anual) */
-	--hub-calendar-month-card-bg: #f9fafb;
-	--hub-calendar-month-card-hover-bg: #f3f4f6;
-	--hub-calendar-month-card-padding: 1.5rem;
-
-	/* Colores */
-	--hub-calendar-primary: #3b82f6;
-	--hub-calendar-muted: #6b7280;
+	--hub-calendar-border-color: #d0d7de;
+	--hub-calendar-btn-active-bg: #0d6efd;
+	--hub-calendar-event-bg: #2563eb;
 }
 ```
 
-### Clases CSS
+Ejemplo de integración Bootstrap (opcional):
 
-| Clase                             | Descripción                      |
-| --------------------------------- | -------------------------------- |
-| `.hub-calendar`                   | Contenedor raíz                  |
-| `.hub-calendar__header`           | Cabecera superior con navegación |
-| `.hub-calendar__day`              | Contenedor de celda de día       |
-| `.hub-calendar__day--today`       | Estilo para hoy                  |
-| `.hub-calendar__day--selected`    | Estilo para día seleccionado     |
-| `.hub-calendar__day--weekend`     | Estilo para fin de semana        |
-| `.hub-calendar__day--other-month` | Días de meses adyacentes         |
-| `.hub-calendar__event`            | Elemento de evento               |
-| `.hub-calendar__month-card`       | Tarjeta de mes en vista anual    |
+```scss
+hub-calendar {
+	--hub-calendar-bg: var(--bs-body-bg);
+	--hub-calendar-color: var(--bs-body-color);
+	--hub-calendar-border-color: var(--bs-border-color);
+	--hub-calendar-btn-active-bg: var(--bs-primary);
+}
+```
 
 ## 📞 Soporte y Licencia
 
