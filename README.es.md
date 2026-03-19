@@ -358,12 +358,6 @@ Catálogo completo de variables CSS:
 
 - [`./docs/css-variables-reference.md`](./docs/css-variables-reference.md)
 
-Importa el stylesheet una sola vez en tus estilos globales:
-
-```scss
-@use 'ng-hub-ui-calendar/src/lib/styles/calendar.scss';
-```
-
 Ejemplo agnóstico de framework:
 
 ```scss

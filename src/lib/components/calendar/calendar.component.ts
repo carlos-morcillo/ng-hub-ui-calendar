@@ -51,6 +51,7 @@ import { CalendarConfig, CalendarViewType, DEFAULT_CALENDAR_CONFIG } from '../..
 	standalone: true,
 	imports: [DatePipe, NgTemplateOutlet, TitleCasePipe],
 	templateUrl: './calendar.component.html',
+	styleUrl: './calendar.component.scss',
 	host: {
 		class: 'hub-calendar'
 	}

@@ -364,12 +364,6 @@ Full CSS variable catalog:
 
 - [`./docs/css-variables-reference.md`](./docs/css-variables-reference.md)
 
-Import the stylesheet once in your global styles:
-
-```scss
-@use 'ng-hub-ui-calendar/src/lib/styles/calendar.scss';
-```
-
 Framework-agnostic customization example:
 
 ```scss

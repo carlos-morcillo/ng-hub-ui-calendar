@@ -1,28 +1,5 @@
 :root,
 :host {
-	--hub-ref-color-white: #ffffff;
-	--hub-ref-space-1: 0.25rem;
-	--hub-ref-space-2: 0.5rem;
-	--hub-ref-space-3: 1rem;
-	--hub-ref-space-4: 1.5rem;
-	--hub-ref-radius-sm: 0.25rem;
-	--hub-ref-radius-md: 0.5rem;
-	--hub-ref-font-family-base: system-ui, -apple-system, sans-serif;
-	--hub-ref-font-size-xs: 0.625rem;
-	--hub-ref-font-size-sm: 0.75rem;
-	--hub-ref-font-size-base: 0.875rem;
-	--hub-ref-font-size-lg: 1rem;
-	--hub-sys-surface-page: #ffffff;
-	--hub-sys-surface-elevated: #f9fafb;
-	--hub-sys-text-primary: #1f2937;
-	--hub-sys-text-muted: #6b7280;
-	--hub-sys-border-color-default: #e5e7eb;
-	--hub-sys-color-primary: #3b82f6;
-	--hub-sys-color-primary-subtle: #dbeafe;
-	--hub-sys-transition-base: all 0.15s ease;
-}
-
-.hub-calendar {
 	--hub-calendar-bg: var(--hub-sys-surface-page, #ffffff);
 	--hub-calendar-color: var(--hub-sys-text-primary, #1f2937);
 	--hub-calendar-border-color: var(--hub-sys-border-color-default, #e5e7eb);
@@ -60,7 +37,9 @@
 	--hub-calendar-primary: var(--hub-sys-color-primary, #3b82f6);
 	--hub-calendar-muted: var(--hub-sys-text-muted, #6b7280);
 	--hub-calendar-btn-transition: var(--hub-sys-transition-base, all 0.15s ease);
+}
 
+:host {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
@@ -70,7 +49,9 @@
 	border-radius: var(--hub-calendar-border-radius, var(--hub-ref-radius-md, 0.5rem));
 	border: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
 	overflow: hidden;
+}
 
+.hub-calendar {
 	&__header {
 		display: flex;
 		align-items: center;
@@ -160,6 +141,8 @@
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
 		min-height: 100px;
+		/* Prevent intrinsic content width from expanding month grid tracks. */
+		min-width: 0;
 	}
 
 	&__day {
@@ -172,6 +155,8 @@
 		flex-direction: column;
 		gap: var(--hub-ref-space-1, 0.25rem);
 		min-height: var(--hub-calendar-day-min-height, 80px);
+		/* Allow grid items to shrink below min-content width when event text is long. */
+		min-width: 0;
 
 		&:last-child {
 			border-right: none;
@@ -213,6 +198,8 @@
 		flex-direction: column;
 		gap: 0.125rem;
 		overflow: hidden;
+		/* Keep event content clipped inside each day cell. */
+		min-width: 0;
 	}
 
 	&__event {
@@ -226,6 +213,11 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		/* Ensure each event never exceeds the day cell width. */
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
 
 		&:hover {
 			opacity: 0.9;
