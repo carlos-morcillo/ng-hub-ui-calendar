@@ -136,11 +136,6 @@ export class HubCalendarComponent<T = any> {
 	readonly eventDrop = output<{ event: CalendarEvent<T>; newDate: Date; previousDate: Date }>();
 
 	/**
-	 * Emitted when the view type changes.
-	 */
-	readonly viewChange = output<CalendarViewType>();
-
-	/**
 	 * Emitted when navigation changes the displayed date.
 	 */
 	readonly dateChange = output<Date>();
@@ -328,7 +323,6 @@ export class HubCalendarComponent<T = any> {
 	 */
 	setView(view: CalendarViewType): void {
 		this.view.set(view);
-		this.viewChange.emit(view);
 	}
 
 	// =========================================================================
