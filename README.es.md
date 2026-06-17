@@ -21,18 +21,23 @@ Este paquete forma parte de [Hub UI](https://hubui.dev/), una colección de bibl
 
 Esta librería es parte del ecosistema **Hub UI**:
 
-- [**ng-hub-ui-accordion**](https://www.npmjs.com/package/ng-hub-ui-accordion)
+- [**ng-hub-ui-accordion**](https://www.npmjs.com/package/ng-hub-ui-accordion) (obsoleto — usa ng-hub-ui-panels)
 - [**ng-hub-ui-action-sheet**](https://www.npmjs.com/package/ng-hub-ui-action-sheet)
 - [**ng-hub-ui-avatar**](https://www.npmjs.com/package/ng-hub-ui-avatar)
 - [**ng-hub-ui-board**](https://www.npmjs.com/package/ng-hub-ui-board)
 - [**ng-hub-ui-breadcrumbs**](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
 - [**ng-hub-ui-calendar**](https://www.npmjs.com/package/ng-hub-ui-calendar) ← Estás aquí
 - [**ng-hub-ui-dropdown**](https://www.npmjs.com/package/ng-hub-ui-dropdown)
+- [**ng-hub-ui-ds**](https://www.npmjs.com/package/ng-hub-ui-ds)
+- [**ng-hub-ui-forms**](https://www.npmjs.com/package/ng-hub-ui-forms)
 - [**ng-hub-ui-history**](https://www.npmjs.com/package/ng-hub-ui-history)
+- [**ng-hub-ui-milestones**](https://www.npmjs.com/package/ng-hub-ui-milestones)
 - [**ng-hub-ui-modal**](https://www.npmjs.com/package/ng-hub-ui-modal)
 - [**ng-hub-ui-nav**](https://www.npmjs.com/package/ng-hub-ui-nav)
 - [**ng-hub-ui-paginable**](https://www.npmjs.com/package/ng-hub-ui-paginable)
+- [**ng-hub-ui-panels**](https://www.npmjs.com/package/ng-hub-ui-panels)
 - [**ng-hub-ui-portal**](https://www.npmjs.com/package/ng-hub-ui-portal)
+- [**ng-hub-ui-skeleton**](https://www.npmjs.com/package/ng-hub-ui-skeleton)
 - [**ng-hub-ui-sortable**](https://www.npmjs.com/package/ng-hub-ui-sortable)
 - [**ng-hub-ui-stepper**](https://www.npmjs.com/package/ng-hub-ui-stepper)
 - [**ng-hub-ui-utils**](https://www.npmjs.com/package/ng-hub-ui-utils)
@@ -398,7 +403,7 @@ hub-calendar {
 ## 📞 Soporte y Licencia
 
 - **Issues**: [GitHub Issues](https://github.com/carlos-morcillo/ng-hub-ui-calendar/issues)
-- **Autor**: Carlos Morcillo
+- **Autor**: [Carlos Morcillo](https://www.carlosmorcillo.com)
 - **Licencia**: MIT
 
 ---
