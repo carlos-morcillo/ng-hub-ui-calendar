@@ -1,28 +1,29 @@
 {
-	"name": "ng-hub-ui-calendar",
-	"version": "21.1.1",
-	"description": "Calendar component for Angular applications with multiple views, native drag-and-drop, and event management",
-	"peerDependencies": {
-		"@angular/common": ">=19.0.0",
-		"@angular/core": ">=19.0.0",
-		"ng-hub-ui-utils": "^1.2.0"
-	},
-	"dependencies": {
-		"tslib": "^2.3.0"
-	},
-	"license": "MIT",
-	"author": "Carlos Morcillo",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/carlos-morcillo/ng-hub-ui-calendar"
-	},
-	"keywords": [
-		"angular",
-		"calendar",
-		"datepicker",
-		"events",
-		"scheduler",
-		"ng-hub-ui",
-		"drag-drop"
-	]
+  "name": "ng-hub-ui-calendar",
+  "version": "22.0.0",
+  "description": "Calendar component for Angular applications with multiple views, native drag-and-drop, and event management",
+  "peerDependencies": {
+    "@angular/common": ">=19.0.0",
+    "@angular/core": ">=19.0.0",
+    "ng-hub-ui-utils": "^1.2.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "license": "MIT",
+  "author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carlos-morcillo/ng-hub-ui-calendar"
+  },
+  "keywords": [
+    "angular",
+    "calendar",
+    "datepicker",
+    "events",
+    "scheduler",
+    "ng-hub-ui",
+    "drag-drop"
+  ],
+  "homepage": "https://hubui.dev/"
 }
