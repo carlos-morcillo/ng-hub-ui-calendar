@@ -6,7 +6,8 @@
 	--hub-calendar-border-radius: var(--hub-ref-radius-md, 0.5rem);
 	--hub-calendar-font-family: var(--hub-ref-font-family-base, system-ui, -apple-system, sans-serif);
 	--hub-calendar-header-bg: var(--hub-sys-surface-elevated, #f9fafb);
-	--hub-calendar-header-padding: var(--hub-ref-space-3, 1rem);
+	--hub-calendar-header-padding-x: var(--hub-ref-space-3, 1rem);
+	--hub-calendar-header-padding-y: var(--hub-ref-space-3, 1rem);
 	--hub-calendar-btn-bg: var(--hub-ref-color-white, #ffffff);
 	--hub-calendar-btn-color: inherit;
 	--hub-calendar-btn-border-color: var(--hub-sys-border-color-default, #e5e7eb);
@@ -16,7 +17,8 @@
 	--hub-calendar-btn-hover-bg: #f3f4f6;
 	--hub-calendar-btn-active-bg: var(--hub-sys-color-primary, #3b82f6);
 	--hub-calendar-btn-active-color: var(--hub-ref-color-white, #ffffff);
-	--hub-calendar-day-padding: var(--hub-ref-space-2, 0.5rem);
+	--hub-calendar-day-padding-x: var(--hub-ref-space-2, 0.5rem);
+	--hub-calendar-day-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-day-min-height: 80px;
 	--hub-calendar-day-hover-bg: #f3f4f6;
 	--hub-calendar-day-today-bg: #eff6ff;
@@ -33,7 +35,8 @@
 	--hub-calendar-event-font-size: var(--hub-ref-font-size-sm, 0.75rem);
 	--hub-calendar-month-card-bg: var(--hub-sys-surface-elevated, #f9fafb);
 	--hub-calendar-month-card-hover-bg: #f3f4f6;
-	--hub-calendar-month-card-padding: var(--hub-ref-space-4, 1.5rem);
+	--hub-calendar-month-card-padding-x: var(--hub-ref-space-4, 1.5rem);
+	--hub-calendar-month-card-padding-y: var(--hub-ref-space-4, 1.5rem);
 	--hub-calendar-primary: var(--hub-sys-color-primary, #3b82f6);
 	--hub-calendar-muted: var(--hub-sys-text-muted, #6b7280);
 	--hub-calendar-btn-transition: var(--hub-sys-transition-base, all 0.15s ease);
@@ -56,7 +59,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: var(--hub-calendar-header-padding, var(--hub-ref-space-3, 1rem));
+		padding: var(--hub-calendar-header-padding-y, var(--hub-ref-space-3, 1rem)) var(--hub-calendar-header-padding-x, var(--hub-ref-space-3, 1rem));
 		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
 		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f9fafb));
 	}
@@ -146,7 +149,7 @@
 	}
 
 	&__day {
-		padding: var(--hub-calendar-day-padding, var(--hub-ref-space-2, 0.5rem));
+		padding: var(--hub-calendar-day-padding-y, var(--hub-ref-space-2, 0.5rem)) var(--hub-calendar-day-padding-x, var(--hub-ref-space-2, 0.5rem));
 		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
 		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
 		cursor: pointer;
@@ -262,7 +265,7 @@
 	}
 
 	&__day-view-header {
-		padding: var(--hub-calendar-header-padding, var(--hub-ref-space-3, 1rem));
+		padding: var(--hub-calendar-header-padding-y, var(--hub-ref-space-3, 1rem)) var(--hub-calendar-header-padding-x, var(--hub-ref-space-3, 1rem));
 		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f9fafb));
 		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
 
@@ -350,7 +353,7 @@
 	}
 
 	&__month-card {
-		padding: var(--hub-calendar-month-card-padding, var(--hub-ref-space-4, 1.5rem));
+		padding: var(--hub-calendar-month-card-padding-y, var(--hub-ref-space-4, 1.5rem)) var(--hub-calendar-month-card-padding-x, var(--hub-ref-space-4, 1.5rem));
 		text-align: center;
 		background: var(--hub-calendar-month-card-bg, var(--hub-sys-surface-elevated, #f9fafb));
 		border-radius: var(--hub-calendar-border-radius, var(--hub-ref-radius-md, 0.5rem));
