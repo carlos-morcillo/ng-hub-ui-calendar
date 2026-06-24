@@ -79,8 +79,10 @@ Defined and consumed by `projects/calendar/src/lib/styles/base.scss`.
 | `--hub-calendar-color` | `var(--hub-sys-text-primary, #1f2937)` |
 | `--hub-calendar-border-color` | `var(--hub-sys-border-color-default, #e5e7eb)` |
 | `--hub-calendar-border-radius` | `var(--hub-ref-radius-md, 0.5rem)` |
+| `--hub-calendar-accent` | `var(--hub-sys-color-primary, #3b82f6)` |
+| `--hub-calendar-accent-subtle` | `color-mix(in srgb, var(--hub-calendar-accent) 16%, var(--hub-calendar-bg, #fff))` |
 | `--hub-calendar-font-family` | `var(--hub-ref-font-family-base, system-ui, -apple-system, sans-serif)` |
-| `--hub-calendar-primary` | `var(--hub-sys-color-primary, #3b82f6)` |
+| `--hub-calendar-primary` | `var(--hub-calendar-accent)` |
 | `--hub-calendar-muted` | `var(--hub-sys-text-muted, #6b7280)` |
 
 ### Header
@@ -88,7 +90,8 @@ Defined and consumed by `projects/calendar/src/lib/styles/base.scss`.
 | Variable | Default |
 | --- | --- |
 | `--hub-calendar-header-bg` | `var(--hub-sys-surface-elevated, #f9fafb)` |
-| `--hub-calendar-header-padding` | `var(--hub-ref-space-3, 1rem)` |
+| `--hub-calendar-header-padding-x` | `var(--hub-ref-space-3, 1rem)` |
+| `--hub-calendar-header-padding-y` | `var(--hub-ref-space-3, 1rem)` |
 
 ### Buttons
 
@@ -109,21 +112,22 @@ Defined and consumed by `projects/calendar/src/lib/styles/base.scss`.
 
 | Variable | Default |
 | --- | --- |
-| `--hub-calendar-day-padding` | `var(--hub-ref-space-2, 0.5rem)` |
+| `--hub-calendar-day-padding-x` | `var(--hub-ref-space-2, 0.5rem)` |
+| `--hub-calendar-day-padding-y` | `var(--hub-ref-space-2, 0.5rem)` |
 | `--hub-calendar-day-min-height` | `80px` |
 | `--hub-calendar-day-hover-bg` | `#f3f4f6` |
-| `--hub-calendar-day-today-bg` | `#eff6ff` |
+| `--hub-calendar-day-today-bg` | `color-mix(in srgb, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff))` |
 | `--hub-calendar-day-other-month-bg` | `var(--hub-sys-surface-elevated, #f9fafb)` |
 | `--hub-calendar-day-other-month-color` | `#9ca3af` |
 | `--hub-calendar-day-weekend-bg` | `#fafafa` |
-| `--hub-calendar-day-selected-bg` | `var(--hub-sys-color-primary-subtle, #dbeafe)` |
+| `--hub-calendar-day-selected-bg` | `var(--hub-calendar-accent-subtle)` |
 | `--hub-calendar-day-drag-over-bg` | `#bfdbfe` |
 
 ### Events
 
 | Variable | Default |
 | --- | --- |
-| `--hub-calendar-event-bg` | `var(--hub-sys-color-primary, #3b82f6)` |
+| `--hub-calendar-event-bg` | `var(--hub-calendar-accent)` |
 | `--hub-calendar-event-color` | `var(--hub-ref-color-white, #ffffff)` |
 | `--hub-calendar-event-border-radius` | `var(--hub-ref-radius-sm, 0.25rem)` |
 | `--hub-calendar-event-padding-x` | `var(--hub-ref-space-2, 0.5rem)` |
@@ -136,7 +140,8 @@ Defined and consumed by `projects/calendar/src/lib/styles/base.scss`.
 | --- | --- |
 | `--hub-calendar-month-card-bg` | `var(--hub-sys-surface-elevated, #f9fafb)` |
 | `--hub-calendar-month-card-hover-bg` | `#f3f4f6` |
-| `--hub-calendar-month-card-padding` | `var(--hub-ref-space-4, 1.5rem)` |
+| `--hub-calendar-month-card-padding-x` | `var(--hub-ref-space-4, 1.5rem)` |
+| `--hub-calendar-month-card-padding-y` | `var(--hub-ref-space-4, 1.5rem)` |
 
 ---
 
@@ -170,10 +175,12 @@ hub-calendar {
 
 ```scss
 hub-calendar {
-  --hub-calendar-header-padding: 0.75rem;
+  --hub-calendar-header-padding-x: 0.75rem;
+  --hub-calendar-header-padding-y: 0.75rem;
   --hub-calendar-day-min-height: 64px;
   --hub-calendar-event-font-size: 0.6875rem;
-  --hub-calendar-month-card-padding: 1rem;
+  --hub-calendar-month-card-padding-x: 1rem;
+  --hub-calendar-month-card-padding-y: 1rem;
 }
 ```
 

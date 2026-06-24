@@ -2,6 +2,28 @@
 
 This document details the breaking changes introduced in major versions of `ng-hub-ui-calendar` and how to migrate your codebase.
 
+## Version 22.1.0
+
+### Removal of Shorthand Padding Tokens
+
+The uniform `padding` shorthand tokens have been removed in favour of the canonical directional `-padding-x` / `-padding-y` token pairs. This brings the calendar in line with the rest of the ecosystem, where every spacing token exposes independent horizontal and vertical control. The default rendering is unchanged.
+
+The following tokens were **removed**:
+
+- `--hub-calendar-day-padding`
+- `--hub-calendar-header-padding`
+- `--hub-calendar-month-card-padding`
+
+**Migration Steps:**
+
+If you override any of the removed shorthand tokens, replace each one with the corresponding `-padding-x` / `-padding-y` pair:
+
+- `--hub-calendar-day-padding: 0.5rem;` becomes `--hub-calendar-day-padding-x: 0.5rem;` and `--hub-calendar-day-padding-y: 0.5rem;`
+- `--hub-calendar-header-padding: 1rem;` becomes `--hub-calendar-header-padding-x: 1rem;` and `--hub-calendar-header-padding-y: 1rem;`
+- `--hub-calendar-month-card-padding: 1.5rem;` becomes `--hub-calendar-month-card-padding-x: 1.5rem;` and `--hub-calendar-month-card-padding-y: 1.5rem;`
+
+If you never overrode these tokens, no action is required.
+
 ## Version 21.0.0
 
 ### SCSS Variables Standardization & File Rename

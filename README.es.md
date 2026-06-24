@@ -318,6 +318,7 @@ export class EventHandlingComponent {
 | `eventClass`   | `string \| Function` | -            | Clase(s) CSS para eventos                              |
 | `weekStartsOn` | `0-6`                | `0`          | Día en que comienza la semana (0=Domingo)              |
 | `locale`       | `string`             | `'en'`       | Código de idioma para traducciones                     |
+| `variant`      | `string`             | `'primary'`  | Acento semántico: `primary` / `success` / `danger` / `warning` / `info`, o cualquier nombre `--hub-sys-color-*` |
 
 ### Outputs
 
@@ -377,6 +378,37 @@ interface CalendarConfig {
 Catálogo completo de variables CSS:
 
 - [`./docs/css-variables-reference.md`](./docs/css-variables-reference.md)
+
+### Acento Semántico
+
+El input `variant` re-basa un único token de acento, `--hub-calendar-accent`, que controla el día de hoy / día seleccionado, el botón de vista activo y las píldoras de eventos. Los valores integrados (`primary` / `success` / `danger` / `warning` / `info`) se asignan a las familias de color del sistema de diseño; cualquier otra cadena se lee como `--hub-sys-color-<variant>`.
+
+```html
+<hub-calendar variant="success" [events]="events()"></hub-calendar>
+```
+
+Dos tokens de acento respaldan este comportamiento:
+
+| Variable                       | Por Defecto                                                    | Descripción                                       |
+| ------------------------------ | -------------------------------------------------------------- | ------------------------------------------------- |
+| `--hub-calendar-accent`        | `var(--hub-sys-color-primary, #3b82f6)`                        | Acento base (botón activo, píldoras de eventos)   |
+| `--hub-calendar-accent-subtle` | `color-mix(in srgb, var(--hub-calendar-accent) 16%, var(--hub-calendar-bg, #fff))` | Acento sutil (fondo del día seleccionado)         |
+
+### Mixin Sass `hub-calendar-theme()`
+
+Tematiza un calendario en una sola llamada. Todos los parámetros son opcionales y por defecto valen `null`, por lo que solo se emiten como overrides `--hub-calendar-*` los que pases. Basado en tokens, sin dependencia de Bootstrap.
+
+```scss
+@use 'ng-hub-ui-calendar/styles/mixins/calendar-theme' as *;
+
+.planner {
+	@include hub-calendar-theme(
+		$accent: var(--hub-sys-color-info),
+		$day-min-height: 110px,
+		$event-border-radius: 999px
+	);
+}
+```
 
 Ejemplo agnóstico de framework:
 

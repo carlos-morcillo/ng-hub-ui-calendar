@@ -46,6 +46,9 @@ import { CalendarConfig, CalendarViewType, DEFAULT_CALENDAR_CONFIG } from '../..
  * </hub-calendar>
  * ```
  */
+/** Variants with exact design-system token coverage via the SCSS `@each` loop. */
+const CALENDAR_BUILT_IN_VARIANTS = new Set<string>(['primary', 'success', 'danger', 'warning', 'info']);
+
 @Component({
 	selector: 'hub-calendar',
 	standalone: true,
@@ -53,7 +56,9 @@ import { CalendarConfig, CalendarViewType, DEFAULT_CALENDAR_CONFIG } from '../..
 	templateUrl: './calendar.component.html',
 	styleUrl: './calendar.component.scss',
 	host: {
-		class: 'hub-calendar'
+		class: 'hub-calendar',
+		'[attr.data-variant]': 'variant() ?? null',
+		'[style.--hub-calendar-accent]': 'customAccent()'
 	}
 })
 export class HubCalendarComponent<T = any> {
@@ -66,6 +71,23 @@ export class HubCalendarComponent<T = any> {
 	// =========================================================================
 	// INPUTS
 	// =========================================================================
+
+	/**
+	 * Semantic accent of the calendar: `'primary'` · `'success'` · `'danger'` ·
+	 * `'warning'` · `'info'`, or any custom string (read as `--hub-sys-color-<variant>`).
+	 * Re-bases `--hub-calendar-accent`, which drives the today / selected day, the
+	 * active view button and the event chips. Defaults to primary.
+	 */
+	readonly variant = input<string>();
+
+	/**
+	 * Inline accent for custom (non-built-in) variants — the built-in five are
+	 * resolved by the SCSS `@each` loop, so this returns `null` for them.
+	 */
+	protected readonly customAccent = computed(() => {
+		const v = this.variant();
+		return v && !CALENDAR_BUILT_IN_VARIANTS.has(v) ? `var(--hub-sys-color-${v})` : null;
+	});
 
 	/**
 	 * Events to display on the calendar.

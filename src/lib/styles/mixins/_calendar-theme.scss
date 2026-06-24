@@ -1,0 +1,148 @@
+// ─────────────────────────────────────────────────────────────────────────
+// hub-calendar-theme — one-call theming for `<hub-calendar>`
+// ─────────────────────────────────────────────────────────────────────────
+//
+// Override any of the `--hub-calendar-*` design tokens in a single include.
+// Every parameter is OPTIONAL and defaults to `null`: only the parameters you
+// pass are emitted, so the rest keep the component's defaults. Token-based and
+// self-contained (no Bootstrap dependencies).
+//
+// The semantic `variant` accent is applied automatically; use this mixin to
+// restyle the shell — surfaces, header, day cells, events — or to set a brand
+// accent on a custom selector.
+//
+// @example
+//
+//   @use 'ng-hub-ui-calendar/styles/mixins/calendar-theme' as *;
+//
+//   .planner {
+//     @include hub-calendar-theme(
+//       $accent: var(--hub-sys-color-info),
+//       $day-min-height: 110px,
+//       $event-border-radius: 999px
+//     );
+//   }
+//
+// scss-docs-start hub-calendar-theme
+@mixin hub-calendar-theme(
+	// ── Accent & surface ──
+	$accent: null,
+	$accent-subtle: null,
+	$bg: null,
+	$color: null,
+	$border-color: null,
+	$border-radius: null,
+	// ── Header ──
+	$header-bg: null,
+	$header-padding-x: null,
+	$header-padding-y: null,
+	// ── Buttons (nav / view) ──
+	$btn-bg: null,
+	$btn-color: null,
+	$btn-border-color: null,
+	$btn-hover-bg: null,
+	$btn-active-bg: null,
+	$btn-active-color: null,
+	// ── Day cells ──
+	$day-min-height: null,
+	$day-hover-bg: null,
+	$day-today-bg: null,
+	$day-selected-bg: null,
+	$day-other-month-bg: null,
+	$day-other-month-color: null,
+	$day-weekend-bg: null,
+	// ── Events ──
+	$event-bg: null,
+	$event-color: null,
+	$event-border-radius: null,
+	$event-font-size: null
+) {
+	// Accent & surface
+	@if $accent != null {
+		--hub-calendar-accent: #{$accent};
+	}
+	@if $accent-subtle != null {
+		--hub-calendar-accent-subtle: #{$accent-subtle};
+	}
+	@if $bg != null {
+		--hub-calendar-bg: #{$bg};
+	}
+	@if $color != null {
+		--hub-calendar-color: #{$color};
+	}
+	@if $border-color != null {
+		--hub-calendar-border-color: #{$border-color};
+	}
+	@if $border-radius != null {
+		--hub-calendar-border-radius: #{$border-radius};
+	}
+
+	// Header
+	@if $header-bg != null {
+		--hub-calendar-header-bg: #{$header-bg};
+	}
+	@if $header-padding-x != null {
+		--hub-calendar-header-padding-x: #{$header-padding-x};
+	}
+	@if $header-padding-y != null {
+		--hub-calendar-header-padding-y: #{$header-padding-y};
+	}
+
+	// Buttons
+	@if $btn-bg != null {
+		--hub-calendar-btn-bg: #{$btn-bg};
+	}
+	@if $btn-color != null {
+		--hub-calendar-btn-color: #{$btn-color};
+	}
+	@if $btn-border-color != null {
+		--hub-calendar-btn-border-color: #{$btn-border-color};
+	}
+	@if $btn-hover-bg != null {
+		--hub-calendar-btn-hover-bg: #{$btn-hover-bg};
+	}
+	@if $btn-active-bg != null {
+		--hub-calendar-btn-active-bg: #{$btn-active-bg};
+	}
+	@if $btn-active-color != null {
+		--hub-calendar-btn-active-color: #{$btn-active-color};
+	}
+
+	// Day cells
+	@if $day-min-height != null {
+		--hub-calendar-day-min-height: #{$day-min-height};
+	}
+	@if $day-hover-bg != null {
+		--hub-calendar-day-hover-bg: #{$day-hover-bg};
+	}
+	@if $day-today-bg != null {
+		--hub-calendar-day-today-bg: #{$day-today-bg};
+	}
+	@if $day-selected-bg != null {
+		--hub-calendar-day-selected-bg: #{$day-selected-bg};
+	}
+	@if $day-other-month-bg != null {
+		--hub-calendar-day-other-month-bg: #{$day-other-month-bg};
+	}
+	@if $day-other-month-color != null {
+		--hub-calendar-day-other-month-color: #{$day-other-month-color};
+	}
+	@if $day-weekend-bg != null {
+		--hub-calendar-day-weekend-bg: #{$day-weekend-bg};
+	}
+
+	// Events
+	@if $event-bg != null {
+		--hub-calendar-event-bg: #{$event-bg};
+	}
+	@if $event-color != null {
+		--hub-calendar-event-color: #{$event-color};
+	}
+	@if $event-border-radius != null {
+		--hub-calendar-event-border-radius: #{$event-border-radius};
+	}
+	@if $event-font-size != null {
+		--hub-calendar-event-font-size: #{$event-font-size};
+	}
+}
+// scss-docs-end hub-calendar-theme

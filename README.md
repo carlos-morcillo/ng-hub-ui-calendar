@@ -324,6 +324,7 @@ export class EventHandlingComponent {
 | `eventClass`   | `string \| Function` | -            | CSS class(es) for events                 |
 | `weekStartsOn` | `0-6`                | `0`          | Day week starts on (0=Sunday)            |
 | `locale`       | `string`             | `'en'`       | Language code for translations           |
+| `variant`      | `string`             | `'primary'`  | Semantic accent: `primary` / `success` / `danger` / `warning` / `info`, or any `--hub-sys-color-*` name |
 
 ### Outputs
 
@@ -383,6 +384,37 @@ interface CalendarConfig {
 Full CSS variable catalog:
 
 - [`./docs/css-variables-reference.md`](./docs/css-variables-reference.md)
+
+### Semantic Accent
+
+The `variant` input re-bases a single accent token, `--hub-calendar-accent`, which drives the today / selected day, the active view button and the event chips. The built-in values (`primary` / `success` / `danger` / `warning` / `info`) map to the design-system color families; any other string is read as `--hub-sys-color-<variant>`.
+
+```html
+<hub-calendar variant="success" [events]="events()"></hub-calendar>
+```
+
+Two accent tokens back this behaviour:
+
+| Variable                       | Default                                                         | Description                                |
+| ------------------------------ | -------------------------------------------------------------- | ------------------------------------------ |
+| `--hub-calendar-accent`        | `var(--hub-sys-color-primary, #3b82f6)`                        | Base accent (active button, event chips)   |
+| `--hub-calendar-accent-subtle` | `color-mix(in srgb, var(--hub-calendar-accent) 16%, var(--hub-calendar-bg, #fff))` | Subtle accent (selected day background)    |
+
+### `hub-calendar-theme()` Sass Mixin
+
+Theme a calendar in a single include. Every parameter is optional and defaults to `null`, so only the ones you pass are emitted as `--hub-calendar-*` overrides. Token-based, with no Bootstrap dependency.
+
+```scss
+@use 'ng-hub-ui-calendar/styles/mixins/calendar-theme' as *;
+
+.planner {
+	@include hub-calendar-theme(
+		$accent: var(--hub-sys-color-info),
+		$day-min-height: 110px,
+		$event-border-radius: 999px
+	);
+}
+```
 
 Framework-agnostic customization example:
 

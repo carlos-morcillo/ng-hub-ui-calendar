@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [22.1.0] - 2026-06-24
+
+### Added
+
+- New **`variant` input** on `<hub-calendar>` selecting a **semantic accent**: `<hub-calendar variant="success">` recolours the today / selected day, the active view button and the event chips. The built-in values (`primary` / `success` / `danger` / `warning` / `info`) map to the design-system families via a CSS `@each` loop; **any other string is also accepted** — the accent reads `--hub-sys-color-<variant>`. Defaults to primary. New tokens `--hub-calendar-accent` and `--hub-calendar-accent-subtle`.
+- New **`hub-calendar-theme()` Sass mixin** (`styles/mixins/calendar-theme`) — theme a calendar in one call: accent, surfaces, header, nav/view buttons, day cells and event chips. Every parameter is optional and defaults to `null`, so only the ones you pass are emitted as `--hub-calendar-*` overrides. Token-based, no Bootstrap dependency.
+
+### Fixed
+
+- The **today** cell background (`--hub-calendar-day-today-bg`) and the selected-day / active-button / event colours now derive from `--hub-calendar-accent` instead of being hard-wired to a fixed blue, so they follow the `variant` and theme overrides. No visual change with the default (primary) accent.
 
 ### Changed
 
