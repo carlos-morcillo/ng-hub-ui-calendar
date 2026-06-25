@@ -1,48 +1,48 @@
 :root,
 :host {
 	--hub-calendar-bg: var(--hub-sys-surface-page, #ffffff);
-	--hub-calendar-color: var(--hub-sys-text-primary, #1f2937);
-	--hub-calendar-border-color: var(--hub-sys-border-color-default, #e5e7eb);
-	--hub-calendar-border-radius: var(--hub-ref-radius-md, 0.5rem);
+	--hub-calendar-color: var(--hub-sys-text-primary, #212529);
+	--hub-calendar-border-color: var(--hub-sys-border-color-default, #dee2e6);
+	--hub-calendar-border-radius: var(--hub-ref-radius-md, 0.375rem);
 	// Semantic accent — drives the today / selected day, the active view button
 	// and the event chips. Defaults to primary; a `variant` re-bases it (@each below).
 	--hub-calendar-accent: var(--hub-sys-color-primary, #3b82f6);
 	--hub-calendar-accent-subtle: color-mix(in srgb, var(--hub-calendar-accent) 16%, var(--hub-calendar-bg, #fff));
 	--hub-calendar-font-family: var(--hub-ref-font-family-base, system-ui, -apple-system, sans-serif);
-	--hub-calendar-header-bg: var(--hub-sys-surface-elevated, #f9fafb);
+	--hub-calendar-header-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-calendar-header-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-calendar-header-padding-y: var(--hub-ref-space-3, 1rem);
 	--hub-calendar-btn-bg: var(--hub-ref-color-white, #ffffff);
 	--hub-calendar-btn-color: inherit;
-	--hub-calendar-btn-border-color: var(--hub-sys-border-color-default, #e5e7eb);
+	--hub-calendar-btn-border-color: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-calendar-btn-border-radius: var(--hub-ref-radius-sm, 0.25rem);
 	--hub-calendar-btn-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-calendar-btn-padding-y: var(--hub-ref-space-2, 0.5rem);
-	--hub-calendar-btn-hover-bg: #f3f4f6;
+	--hub-calendar-btn-hover-bg: var(--hub-sys-state-hover-bg, #f3f4f6);
 	--hub-calendar-btn-active-bg: var(--hub-calendar-accent);
 	--hub-calendar-btn-active-color: var(--hub-ref-color-white, #ffffff);
 	--hub-calendar-day-padding-x: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-day-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-day-min-height: 80px;
-	--hub-calendar-day-hover-bg: #f3f4f6;
+	--hub-calendar-day-hover-bg: var(--hub-sys-state-hover-bg, #f3f4f6);
 	--hub-calendar-day-today-bg: color-mix(in srgb, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff));
-	--hub-calendar-day-other-month-bg: var(--hub-sys-surface-elevated, #f9fafb);
-	--hub-calendar-day-other-month-color: #9ca3af;
-	--hub-calendar-day-weekend-bg: #fafafa;
+	--hub-calendar-day-other-month-bg: var(--hub-sys-surface-elevated, #f8f9fa);
+	--hub-calendar-day-other-month-color: var(--hub-sys-text-muted, #6c757d);
+	--hub-calendar-day-weekend-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-calendar-day-selected-bg: var(--hub-calendar-accent-subtle);
-	--hub-calendar-day-drag-over-bg: #bfdbfe;
+	--hub-calendar-day-drag-over-bg: color-mix(in srgb, var(--hub-calendar-accent) 32%, var(--hub-calendar-bg, #fff));
 	--hub-calendar-event-bg: var(--hub-calendar-accent);
 	--hub-calendar-event-color: var(--hub-ref-color-white, #ffffff);
 	--hub-calendar-event-border-radius: var(--hub-ref-radius-sm, 0.25rem);
 	--hub-calendar-event-padding-x: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-event-padding-y: var(--hub-ref-space-1, 0.25rem);
-	--hub-calendar-event-font-size: var(--hub-ref-font-size-sm, 0.75rem);
-	--hub-calendar-month-card-bg: var(--hub-sys-surface-elevated, #f9fafb);
-	--hub-calendar-month-card-hover-bg: #f3f4f6;
+	--hub-calendar-event-font-size: var(--hub-ref-font-size-sm, 0.875rem);
+	--hub-calendar-month-card-bg: var(--hub-sys-surface-elevated, #f8f9fa);
+	--hub-calendar-month-card-hover-bg: var(--hub-sys-state-hover-bg, #f3f4f6);
 	--hub-calendar-month-card-padding-x: var(--hub-ref-space-4, 1.5rem);
 	--hub-calendar-month-card-padding-y: var(--hub-ref-space-4, 1.5rem);
 	--hub-calendar-primary: var(--hub-calendar-accent);
-	--hub-calendar-muted: var(--hub-sys-text-muted, #6b7280);
+	--hub-calendar-muted: var(--hub-sys-text-muted, #6c757d);
 	--hub-calendar-btn-transition: var(--hub-sys-transition-base, all 0.15s ease);
 }
 
@@ -52,9 +52,9 @@
 	height: 100%;
 	font-family: var(--hub-calendar-font-family, var(--hub-ref-font-family-base, system-ui, -apple-system, sans-serif));
 	background: var(--hub-calendar-bg, var(--hub-sys-surface-page, #ffffff));
-	color: var(--hub-calendar-color, var(--hub-sys-text-primary, #1f2937));
-	border-radius: var(--hub-calendar-border-radius, var(--hub-ref-radius-md, 0.5rem));
-	border: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
+	color: var(--hub-calendar-color, var(--hub-sys-text-primary, #212529));
+	border-radius: var(--hub-calendar-border-radius, var(--hub-ref-radius-md, 0.375rem));
+	border: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 	overflow: hidden;
 }
 
@@ -64,8 +64,8 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: var(--hub-calendar-header-padding-y, var(--hub-ref-space-3, 1rem)) var(--hub-calendar-header-padding-x, var(--hub-ref-space-3, 1rem));
-		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
-		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f9fafb));
+		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
+		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f8f9fa));
 	}
 
 	&__nav {
@@ -75,8 +75,8 @@
 
 	&__title {
 		margin: 0;
-		font-size: 1.25rem;
-		font-weight: 600;
+		font-size: var(--hub-ref-font-size-lg, 1.25rem);
+		font-weight: var(--hub-ref-font-weight-semibold, 600);
 	}
 
 	&__views {
@@ -87,16 +87,16 @@
 	&__btn {
 		padding: var(--hub-calendar-btn-padding-y, var(--hub-ref-space-2, 0.5rem))
 			var(--hub-calendar-btn-padding-x, var(--hub-ref-space-3, 1rem));
-		border: 1px solid var(--hub-calendar-btn-border-color, var(--hub-sys-border-color-default, #e5e7eb));
+		border: 1px solid var(--hub-calendar-btn-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		background: var(--hub-calendar-btn-bg, var(--hub-ref-color-white, #ffffff));
 		color: var(--hub-calendar-btn-color, inherit);
 		border-radius: var(--hub-calendar-btn-border-radius, var(--hub-ref-radius-sm, 0.25rem));
 		cursor: pointer;
-		font-size: var(--hub-ref-font-size-base, 0.875rem);
+		font-size: var(--hub-ref-font-size-base, 1rem);
 		transition: var(--hub-calendar-btn-transition, var(--hub-sys-transition-base, all 0.15s ease));
 
 		&:hover {
-			background: var(--hub-calendar-btn-hover-bg, #f3f4f6);
+			background: var(--hub-calendar-btn-hover-bg, var(--hub-sys-state-hover-bg, #f3f4f6));
 		}
 
 		&--active {
@@ -111,7 +111,7 @@
 	}
 
 	&__icon {
-		font-size: var(--hub-ref-font-size-sm, 0.75rem);
+		font-size: var(--hub-ref-font-size-sm, 0.875rem);
 	}
 
 	&__month {
@@ -124,17 +124,17 @@
 	&__weekdays {
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
-		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
-		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f9fafb));
+		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
+		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f8f9fa));
 	}
 
 	&__weekday {
 		padding: 0.75rem;
 		text-align: center;
-		font-weight: 600;
-		font-size: var(--hub-ref-font-size-sm, 0.75rem);
+		font-weight: var(--hub-ref-font-weight-semibold, 600);
+		font-size: var(--hub-ref-font-size-sm, 0.875rem);
 		text-transform: uppercase;
-		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6b7280));
+		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6c757d));
 	}
 
 	&__weeks {
@@ -154,8 +154,8 @@
 
 	&__day {
 		padding: var(--hub-calendar-day-padding-y, var(--hub-ref-space-2, 0.5rem)) var(--hub-calendar-day-padding-x, var(--hub-ref-space-2, 0.5rem));
-		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
-		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
+		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
+		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		cursor: pointer;
 		transition: background 0.15s ease;
 		display: flex;
@@ -170,7 +170,7 @@
 		}
 
 		&:hover {
-			background: var(--hub-calendar-day-hover-bg, #f3f4f6);
+			background: var(--hub-calendar-day-hover-bg, var(--hub-sys-state-hover-bg, #f3f4f6));
 		}
 
 		&--today {
@@ -178,12 +178,12 @@
 		}
 
 		&--other-month {
-			color: var(--hub-calendar-day-other-month-color, #9ca3af);
-			background: var(--hub-calendar-day-other-month-bg, var(--hub-sys-surface-elevated, #f9fafb));
+			color: var(--hub-calendar-day-other-month-color, var(--hub-sys-text-muted, #6c757d));
+			background: var(--hub-calendar-day-other-month-bg, var(--hub-sys-surface-elevated, #f8f9fa));
 		}
 
 		&--weekend {
-			background: var(--hub-calendar-day-weekend-bg, #fafafa);
+			background: var(--hub-calendar-day-weekend-bg, var(--hub-sys-surface-elevated, #f8f9fa));
 		}
 
 		&--selected {
@@ -191,13 +191,13 @@
 		}
 
 		&--drag-over {
-			background: var(--hub-calendar-day-drag-over-bg, #bfdbfe);
+			background: var(--hub-calendar-day-drag-over-bg, color-mix(in srgb, var(--hub-calendar-accent) 32%, var(--hub-calendar-bg, #fff)));
 		}
 	}
 
 	&__day-number {
-		font-weight: 500;
-		font-size: var(--hub-ref-font-size-base, 0.875rem);
+		font-weight: var(--hub-ref-font-weight-medium, 500);
+		font-size: var(--hub-ref-font-size-base, 1rem);
 	}
 
 	&__events {
@@ -212,7 +212,7 @@
 	&__event {
 		padding: var(--hub-calendar-event-padding-y, var(--hub-ref-space-1, 0.25rem))
 			var(--hub-calendar-event-padding-x, var(--hub-ref-space-2, 0.5rem));
-		font-size: var(--hub-calendar-event-font-size, var(--hub-ref-font-size-sm, 0.75rem));
+		font-size: var(--hub-calendar-event-font-size, var(--hub-ref-font-size-sm, 0.875rem));
 		background: var(--hub-calendar-event-bg, var(--hub-sys-color-primary, #3b82f6));
 		color: var(--hub-calendar-event-color, var(--hub-ref-color-white, #ffffff));
 		border-radius: var(--hub-calendar-event-border-radius, var(--hub-ref-radius-sm, 0.25rem));
@@ -240,7 +240,7 @@
 	}
 
 	&__event-title {
-		font-weight: 500;
+		font-weight: var(--hub-ref-font-weight-medium, 500);
 	}
 
 	&__event-content {
@@ -250,13 +250,13 @@
 	}
 
 	&__event-desc {
-		font-size: var(--hub-ref-font-size-xs, 0.625rem);
+		font-size: var(--hub-ref-font-size-xs, 0.75rem);
 		opacity: 0.8;
 	}
 
 	&__more {
-		font-size: var(--hub-ref-font-size-xs, 0.625rem);
-		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6b7280));
+		font-size: var(--hub-ref-font-size-xs, 0.75rem);
+		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6c757d));
 		text-align: center;
 	}
 
@@ -270,13 +270,13 @@
 
 	&__day-view-header {
 		padding: var(--hub-calendar-header-padding-y, var(--hub-ref-space-3, 1rem)) var(--hub-calendar-header-padding-x, var(--hub-ref-space-3, 1rem));
-		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f9fafb));
-		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
+		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f8f9fa));
+		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 
 		h3 {
 			margin: 0;
-			font-size: var(--hub-ref-font-size-lg, 1rem);
-			font-weight: 600;
+			font-size: var(--hub-ref-font-size-lg, 1.25rem);
+			font-weight: var(--hub-ref-font-weight-semibold, 600);
 		}
 	}
 
@@ -288,20 +288,20 @@
 	&__time-column {
 		width: 60px;
 		flex-shrink: 0;
-		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
+		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 	}
 
 	&__time-slot {
 		height: 60px;
 		padding: var(--hub-ref-space-1, 0.25rem);
-		font-size: var(--hub-ref-font-size-sm, 0.75rem);
-		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6b7280));
-		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
+		font-size: var(--hub-ref-font-size-sm, 0.875rem);
+		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6c757d));
+		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 	}
 
 	&__day-column {
 		flex: 1;
-		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
+		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		position: relative;
 		transition: background 0.15s ease;
 
@@ -314,7 +314,7 @@
 		}
 
 		&--weekend {
-			background: var(--hub-calendar-day-weekend-bg, #fafafa);
+			background: var(--hub-calendar-day-weekend-bg, var(--hub-sys-surface-elevated, #f8f9fa));
 		}
 
 		&--full {
@@ -327,14 +327,14 @@
 		flex-direction: column;
 		align-items: center;
 		padding: var(--hub-ref-space-2, 0.5rem);
-		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
-		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f9fafb));
+		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
+		background: var(--hub-calendar-header-bg, var(--hub-sys-surface-elevated, #f8f9fa));
 	}
 
 	&__day-name {
-		font-size: var(--hub-ref-font-size-xs, 0.625rem);
+		font-size: var(--hub-ref-font-size-xs, 0.75rem);
 		text-transform: uppercase;
-		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6b7280));
+		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6c757d));
 	}
 
 	&__day-events {
@@ -359,29 +359,29 @@
 	&__month-card {
 		padding: var(--hub-calendar-month-card-padding-y, var(--hub-ref-space-4, 1.5rem)) var(--hub-calendar-month-card-padding-x, var(--hub-ref-space-4, 1.5rem));
 		text-align: center;
-		background: var(--hub-calendar-month-card-bg, var(--hub-sys-surface-elevated, #f9fafb));
-		border-radius: var(--hub-calendar-border-radius, var(--hub-ref-radius-md, 0.5rem));
-		border: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #e5e7eb));
+		background: var(--hub-calendar-month-card-bg, var(--hub-sys-surface-elevated, #f8f9fa));
+		border-radius: var(--hub-calendar-border-radius, var(--hub-ref-radius-md, 0.375rem));
+		border: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		cursor: pointer;
 		transition: var(--hub-calendar-btn-transition, var(--hub-sys-transition-base, all 0.15s ease));
 
 		&:hover {
-			background: var(--hub-calendar-month-card-hover-bg, #f3f4f6);
+			background: var(--hub-calendar-month-card-hover-bg, var(--hub-sys-state-hover-bg, #f3f4f6));
 			border-color: var(--hub-calendar-primary, var(--hub-sys-color-primary, #3b82f6));
 		}
 	}
 
 	&__month-name {
 		display: block;
-		font-weight: 600;
-		font-size: var(--hub-ref-font-size-lg, 1rem);
+		font-weight: var(--hub-ref-font-weight-semibold, 600);
+		font-size: var(--hub-ref-font-size-lg, 1.25rem);
 	}
 
 	&__month-events {
 		display: block;
 		margin-top: var(--hub-ref-space-2, 0.5rem);
-		font-size: var(--hub-ref-font-size-sm, 0.75rem);
-		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6b7280));
+		font-size: var(--hub-ref-font-size-sm, 0.875rem);
+		color: var(--hub-calendar-muted, var(--hub-sys-text-muted, #6c757d));
 	}
 }
 
