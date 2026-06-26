@@ -5,9 +5,16 @@
 	--hub-calendar-border-color: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-calendar-border-radius: var(--hub-ref-radius-md, 0.375rem);
 	// Semantic accent — drives the today / selected day, the active view button
-	// and the event chips. Defaults to primary; a `variant` re-bases it (@each below).
-	--hub-calendar-accent: var(--hub-sys-color-primary, #3b82f6);
-	--hub-calendar-accent-subtle: color-mix(in srgb, var(--hub-calendar-accent) 16%, var(--hub-calendar-bg, #fff));
+	// and the event chips. Defaults to primary; a `variant` re-bases this single
+	// slot (@each below) and the roles below recompute from it at runtime.
+	--hub-calendar-accent: var(--hub-sys-color-primary, #0d6efd);
+	// Roles derived locally from the accent slot, mirroring the ds engine: any
+	// accent (a known variant or a custom `brand`) yields a coherent family with
+	// no recompilation. `-on` is a grayscale contrast flip driven by the accent's
+	// own lightness (dark accents → white text, light accents → near-black).
+	--hub-calendar-accent-emphasis: color-mix(in oklch, var(--hub-calendar-accent) 80%, var(--hub-sys-color-ink, #212529));
+	--hub-calendar-accent-subtle: color-mix(in oklch, var(--hub-calendar-accent) 12%, var(--hub-sys-surface-page, #fff));
+	--hub-calendar-accent-on: oklch(from var(--hub-calendar-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
 	--hub-calendar-font-family: var(--hub-ref-font-family-base, system-ui, -apple-system, sans-serif);
 	--hub-calendar-header-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-calendar-header-padding-x: var(--hub-ref-space-3, 1rem);
@@ -20,19 +27,19 @@
 	--hub-calendar-btn-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-btn-hover-bg: var(--hub-sys-state-hover-bg, #f3f4f6);
 	--hub-calendar-btn-active-bg: var(--hub-calendar-accent);
-	--hub-calendar-btn-active-color: var(--hub-ref-color-white, #ffffff);
+	--hub-calendar-btn-active-color: var(--hub-calendar-accent-on, var(--hub-ref-color-white, #ffffff));
 	--hub-calendar-day-padding-x: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-day-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-day-min-height: 80px;
 	--hub-calendar-day-hover-bg: var(--hub-sys-state-hover-bg, #f3f4f6);
-	--hub-calendar-day-today-bg: color-mix(in srgb, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff));
+	--hub-calendar-day-today-bg: color-mix(in oklch, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff));
 	--hub-calendar-day-other-month-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-calendar-day-other-month-color: var(--hub-sys-text-muted, #6c757d);
 	--hub-calendar-day-weekend-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-calendar-day-selected-bg: var(--hub-calendar-accent-subtle);
-	--hub-calendar-day-drag-over-bg: color-mix(in srgb, var(--hub-calendar-accent) 32%, var(--hub-calendar-bg, #fff));
+	--hub-calendar-day-drag-over-bg: color-mix(in oklch, var(--hub-calendar-accent) 32%, var(--hub-calendar-bg, #fff));
 	--hub-calendar-event-bg: var(--hub-calendar-accent);
-	--hub-calendar-event-color: var(--hub-ref-color-white, #ffffff);
+	--hub-calendar-event-color: var(--hub-calendar-accent-on, var(--hub-ref-color-white, #ffffff));
 	--hub-calendar-event-border-radius: var(--hub-ref-radius-sm, 0.25rem);
 	--hub-calendar-event-padding-x: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-event-padding-y: var(--hub-ref-space-1, 0.25rem);
@@ -191,7 +198,7 @@
 		}
 
 		&--drag-over {
-			background: var(--hub-calendar-day-drag-over-bg, color-mix(in srgb, var(--hub-calendar-accent) 32%, var(--hub-calendar-bg, #fff)));
+			background: var(--hub-calendar-day-drag-over-bg, color-mix(in oklch, var(--hub-calendar-accent) 32%, var(--hub-calendar-bg, #fff)));
 		}
 	}
 
@@ -385,13 +392,29 @@
 	}
 }
 
-// ─── Semantic variants ───────────────────────────────────────────────────────
-// Opt-in accent via `<hub-calendar variant="success">`. Each variant re-bases
-// `--hub-calendar-accent` (today / selected day, active view button, event chips);
-// the built-in five map to the design-system families. Custom variants resolve
-// through the host's inline `--hub-calendar-accent` binding.
-@each $variant in (primary, success, danger, warning, info) {
+// ─── Semantic variants (open set) ────────────────────────────────────────────
+// Opt-in accent via `<hub-calendar variant="success">`. Each known variant
+// re-bases the single `--hub-calendar-accent` slot from the matching ds family;
+// the `-emphasis` / `-subtle` / `-on` roles declared in `:root, :host` recompute
+// from it at runtime (today / selected day, active view button, event chips).
+// The nine canonical variants are emitted here.
+@each $variant in (primary, secondary, success, danger, warning, info, neutral, light, dark) {
 	:host([data-variant='#{$variant}']) {
 		--hub-calendar-accent: var(--hub-sys-color-#{$variant});
 	}
+}
+
+// Open-set escape hatch — any custom accent (e.g. a `brand` the host app adds to
+// the ds `$hub-accents` map) works with ONE CSS rule. Re-base the accent slot for
+// the bare `[data-variant]` and the role family is derived locally from it, so no
+// per-variant boilerplate and no recompilation are needed:
+//
+//   hub-calendar[data-variant='brand'] { --hub-calendar-accent: var(--hub-sys-color-brand); }
+//
+// This bare block re-derives the family from the slot so a host that sets only
+// `--hub-calendar-accent` (inline or via the rule above) still gets it.
+:host([data-variant]) {
+	--hub-calendar-accent-emphasis: color-mix(in oklch, var(--hub-calendar-accent) 80%, var(--hub-sys-color-ink, #212529));
+	--hub-calendar-accent-subtle: color-mix(in oklch, var(--hub-calendar-accent) 12%, var(--hub-sys-surface-page, #fff));
+	--hub-calendar-accent-on: oklch(from var(--hub-calendar-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
 }

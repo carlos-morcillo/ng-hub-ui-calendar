@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.2.0] - 2026-06-26
+
+### Changed
+
+- **Accent system migrated to the open-set "local accent slot" pattern.** `<hub-calendar variant="…">` now re-bases a single `--hub-calendar-accent` slot, and the role family — `--hub-calendar-accent-emphasis`, `--hub-calendar-accent-subtle` and the new `--hub-calendar-accent-on` (contrast colour) — is derived **locally** from it with `color-mix(in oklch, …)` / relative color, mirroring the `ng-hub-ui-ds` engine. The built-in variant list grew from 5 to the **nine canonical accents** (`primary · secondary · success · danger · warning · info · neutral · light · dark`), and a bare `[data-variant]` block re-derives the family from the slot so **any custom accent** the host app adds to the ds `$hub-accents` map (e.g. `brand`) works at runtime with one CSS rule — no library recompilation. The active view button and event chip text now read `--hub-calendar-accent-on` for automatic contrast.
+
+### Added
+
+- New tokens `--hub-calendar-accent-on` (grayscale contrast flip driven by the accent's own lightness) and `--hub-calendar-accent-emphasis`.
+
+### Fixed
+
+- Migrated the accent `color-mix()` derivations from the `srgb` colour space to `oklch` for perceptually uniform tints, matching `ng-hub-ui-ds`.
+
 ## [22.1.2] - 2026-06-26
 
 ### Fixed
