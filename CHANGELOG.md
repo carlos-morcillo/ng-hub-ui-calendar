@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.3.0] - 2026-06-30
+
+### Added
+
+- **Tooltip on truncated event titles.** Calendar events already clip their title with an ellipsis when they don't fit the cell; hovering a clipped event now reveals its full title via the hub-ui tooltip — applied automatically through `ng-hub-ui-utils`' `[hubOverflowTooltip]`, only when the title actually overflows. The tooltip is **agnostic**: it defaults to the hub-ui tooltip but is swappable with `provideHubTooltip(...)`. No API changes; requires `ng-hub-ui-utils >= 22.6.0` and the tooltip styles (`@use 'ng-hub-ui-utils/styles/tooltip';`).
+
 ## [22.2.0] - 2026-06-26
 
 ### Changed

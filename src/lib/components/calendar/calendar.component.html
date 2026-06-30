@@ -65,6 +65,7 @@
 						<div
 							class="hub-calendar__event"
 							[class]="getEventClass(event)"
+							[hubOverflowTooltip]="event.title"
 							[attr.draggable]="mergedConfig().dragAndDropEnabled"
 							(click)="onEventClick(event, $event)"
 							(dragstart)="onDragStart(event, $event)"
@@ -117,6 +118,7 @@
 					<div
 						class="hub-calendar__event"
 						[class]="getEventClass(event)"
+							[hubOverflowTooltip]="event.title"
 						[attr.draggable]="mergedConfig().dragAndDropEnabled"
 						(click)="onEventClick(event, $event)"
 						(dragstart)="onDragStart(event, $event)"
@@ -159,6 +161,7 @@
 				<div
 					class="hub-calendar__event"
 					[class]="getEventClass(event)"
+							[hubOverflowTooltip]="event.title"
 					[attr.draggable]="mergedConfig().dragAndDropEnabled"
 					(click)="onEventClick(event, $event)"
 					(dragstart)="onDragStart(event, $event)"

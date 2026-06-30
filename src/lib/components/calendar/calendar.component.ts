@@ -6,7 +6,7 @@
 
 import { DatePipe, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
 import { Component, computed, contentChild, inject, input, model, output, signal, TemplateRef } from '@angular/core';
-import { HubTranslationService } from 'ng-hub-ui-utils';
+import { HubOverflowTooltipDirective, HubTranslationService } from 'ng-hub-ui-utils';
 
 import { DayCellTemplateDirective } from '../../directives/day-cell-template.directive';
 import { EventTemplateDirective } from '../../directives/event-template.directive';
@@ -52,7 +52,7 @@ const CALENDAR_BUILT_IN_VARIANTS = new Set<string>(['primary', 'success', 'dange
 @Component({
 	selector: 'hub-calendar',
 	standalone: true,
-	imports: [DatePipe, NgTemplateOutlet, TitleCasePipe],
+	imports: [DatePipe, NgTemplateOutlet, TitleCasePipe, HubOverflowTooltipDirective],
 	templateUrl: './calendar.component.html',
 	styleUrl: './calendar.component.scss',
 	host: {

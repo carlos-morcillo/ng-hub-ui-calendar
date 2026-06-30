@@ -75,6 +75,7 @@ This library is part of the **Hub UI** ecosystem:
 - **TypeScript**: Full type definitions with CalendarViewType enum
 - **Standalone Components**: Works with modern Angular's standalone architecture
 - **Accessible**: Keyboard navigation and ARIA support
+- **Overflow tooltip**: events that clip their title with an ellipsis reveal the full text on hover (hub-ui tooltip by default, swappable with `provideHubTooltip`; requires `ng-hub-ui-utils >= 22.6.0` + `@use 'ng-hub-ui-utils/styles/tooltip';`)
 - **Lightweight**: No external dependencies (native HTML5 drag-and-drop)
 
 ## 📦 Installation
