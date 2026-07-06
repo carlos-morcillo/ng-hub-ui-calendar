@@ -15,7 +15,7 @@
 	--hub-calendar-accent-emphasis: color-mix(in oklch, var(--hub-calendar-accent) 80%, var(--hub-sys-color-ink, #212529));
 	--hub-calendar-accent-subtle: color-mix(in oklch, var(--hub-calendar-accent) 12%, var(--hub-sys-surface-page, #fff));
 	--hub-calendar-accent-on: oklch(from var(--hub-calendar-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
-	--hub-calendar-font-family: var(--hub-ref-font-family-base, system-ui, -apple-system, sans-serif);
+	--hub-calendar-font-family: var(--hub-ref-font-family-base, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif);
 	--hub-calendar-header-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-calendar-header-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-calendar-header-padding-y: var(--hub-ref-space-3, 1rem);
@@ -25,13 +25,13 @@
 	--hub-calendar-btn-border-radius: var(--hub-ref-radius-sm, 0.25rem);
 	--hub-calendar-btn-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-calendar-btn-padding-y: var(--hub-ref-space-2, 0.5rem);
-	--hub-calendar-btn-hover-bg: var(--hub-sys-state-hover-bg, #f3f4f6);
+	--hub-calendar-btn-hover-bg: var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075));
 	--hub-calendar-btn-active-bg: var(--hub-calendar-accent);
 	--hub-calendar-btn-active-color: var(--hub-calendar-accent-on, var(--hub-ref-color-white, #ffffff));
 	--hub-calendar-day-padding-x: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-day-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-calendar-day-min-height: 80px;
-	--hub-calendar-day-hover-bg: var(--hub-sys-state-hover-bg, #f3f4f6);
+	--hub-calendar-day-hover-bg: var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075));
 	--hub-calendar-day-today-bg: color-mix(in oklch, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff));
 	--hub-calendar-day-other-month-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-calendar-day-other-month-color: var(--hub-sys-text-muted, #6c757d);
@@ -45,19 +45,19 @@
 	--hub-calendar-event-padding-y: var(--hub-ref-space-1, 0.25rem);
 	--hub-calendar-event-font-size: var(--hub-ref-font-size-sm, 0.875rem);
 	--hub-calendar-month-card-bg: var(--hub-sys-surface-elevated, #f8f9fa);
-	--hub-calendar-month-card-hover-bg: var(--hub-sys-state-hover-bg, #f3f4f6);
+	--hub-calendar-month-card-hover-bg: var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075));
 	--hub-calendar-month-card-padding-x: var(--hub-ref-space-4, 1.5rem);
 	--hub-calendar-month-card-padding-y: var(--hub-ref-space-4, 1.5rem);
 	--hub-calendar-primary: var(--hub-calendar-accent);
 	--hub-calendar-muted: var(--hub-sys-text-muted, #6c757d);
-	--hub-calendar-btn-transition: var(--hub-sys-transition-base, all 0.15s ease);
+	--hub-calendar-btn-transition: var(--hub-sys-transition-base, all 0.2s ease-in-out);
 }
 
 :host {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	font-family: var(--hub-calendar-font-family, var(--hub-ref-font-family-base, system-ui, -apple-system, sans-serif));
+	font-family: var(--hub-calendar-font-family, var(--hub-ref-font-family-base, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif));
 	background: var(--hub-calendar-bg, var(--hub-sys-surface-page, #ffffff));
 	color: var(--hub-calendar-color, var(--hub-sys-text-primary, #212529));
 	border-radius: var(--hub-calendar-border-radius, var(--hub-ref-radius-md, 0.375rem));
@@ -100,16 +100,16 @@
 		border-radius: var(--hub-calendar-btn-border-radius, var(--hub-ref-radius-sm, 0.25rem));
 		cursor: pointer;
 		font-size: var(--hub-ref-font-size-base, 1rem);
-		transition: var(--hub-calendar-btn-transition, var(--hub-sys-transition-base, all 0.15s ease));
+		transition: var(--hub-calendar-btn-transition, var(--hub-sys-transition-base, all 0.2s ease-in-out));
 
 		&:hover {
-			background: var(--hub-calendar-btn-hover-bg, var(--hub-sys-state-hover-bg, #f3f4f6));
+			background: var(--hub-calendar-btn-hover-bg, var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075)));
 		}
 
 		&--active {
-			background: var(--hub-calendar-btn-active-bg, var(--hub-sys-color-primary, #3b82f6));
+			background: var(--hub-calendar-btn-active-bg, var(--hub-sys-color-primary, #0d6efd));
 			color: var(--hub-calendar-btn-active-color, var(--hub-ref-color-white, #ffffff));
-			border-color: var(--hub-calendar-btn-active-bg, var(--hub-sys-color-primary, #3b82f6));
+			border-color: var(--hub-calendar-btn-active-bg, var(--hub-sys-color-primary, #0d6efd));
 		}
 
 		&--nav {
@@ -164,7 +164,7 @@
 		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		border-bottom: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		cursor: pointer;
-		transition: background 0.15s ease;
+		transition: background 0.2s ease-in-out;
 		display: flex;
 		flex-direction: column;
 		gap: var(--hub-ref-space-1, 0.25rem);
@@ -177,11 +177,11 @@
 		}
 
 		&:hover {
-			background: var(--hub-calendar-day-hover-bg, var(--hub-sys-state-hover-bg, #f3f4f6));
+			background: var(--hub-calendar-day-hover-bg, var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075)));
 		}
 
 		&--today {
-			background: var(--hub-calendar-day-today-bg, #eff6ff);
+			background: var(--hub-calendar-day-today-bg, color-mix(in oklch, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff)));
 		}
 
 		&--other-month {
@@ -194,7 +194,7 @@
 		}
 
 		&--selected {
-			background: var(--hub-calendar-day-selected-bg, var(--hub-sys-color-primary-subtle, #dbeafe));
+			background: var(--hub-calendar-day-selected-bg, var(--hub-calendar-accent-subtle));
 		}
 
 		&--drag-over {
@@ -220,7 +220,7 @@
 		padding: var(--hub-calendar-event-padding-y, var(--hub-ref-space-1, 0.25rem))
 			var(--hub-calendar-event-padding-x, var(--hub-ref-space-2, 0.5rem));
 		font-size: var(--hub-calendar-event-font-size, var(--hub-ref-font-size-sm, 0.875rem));
-		background: var(--hub-calendar-event-bg, var(--hub-sys-color-primary, #3b82f6));
+		background: var(--hub-calendar-event-bg, var(--hub-sys-color-primary, #0d6efd));
 		color: var(--hub-calendar-event-color, var(--hub-ref-color-white, #ffffff));
 		border-radius: var(--hub-calendar-event-border-radius, var(--hub-ref-radius-sm, 0.25rem));
 		cursor: pointer;
@@ -310,14 +310,14 @@
 		flex: 1;
 		border-right: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		position: relative;
-		transition: background 0.15s ease;
+		transition: background 0.2s ease-in-out;
 
 		&:last-child {
 			border-right: none;
 		}
 
 		&--today {
-			background: var(--hub-calendar-day-today-bg, #eff6ff);
+			background: var(--hub-calendar-day-today-bg, color-mix(in oklch, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff)));
 		}
 
 		&--weekend {
@@ -370,11 +370,11 @@
 		border-radius: var(--hub-calendar-border-radius, var(--hub-ref-radius-md, 0.375rem));
 		border: 1px solid var(--hub-calendar-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		cursor: pointer;
-		transition: var(--hub-calendar-btn-transition, var(--hub-sys-transition-base, all 0.15s ease));
+		transition: var(--hub-calendar-btn-transition, var(--hub-sys-transition-base, all 0.2s ease-in-out));
 
 		&:hover {
-			background: var(--hub-calendar-month-card-hover-bg, var(--hub-sys-state-hover-bg, #f3f4f6));
-			border-color: var(--hub-calendar-primary, var(--hub-sys-color-primary, #3b82f6));
+			background: var(--hub-calendar-month-card-hover-bg, var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075)));
+			border-color: var(--hub-calendar-primary, var(--hub-sys-color-primary, #0d6efd));
 		}
 	}
 

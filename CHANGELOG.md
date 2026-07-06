@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.3.1] - 2026-07-02
+
+### Fixed
+
+- CSS variable fallbacks realigned to the ds light defaults (`--hub-sys-color-primary`: `#3b82f6` → `#0d6efd`; `--hub-sys-state-hover-bg`: `#f3f4f6` → `rgba(0, 0, 0, 0.075)`; `--hub-sys-transition-base`: `all 0.15s ease` → `all 0.2s ease-in-out`; `--hub-ref-font-family-base`: `system-ui, -apple-system, sans-serif` → `system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif`); fallbacks only apply when ng-hub-ui-ds is not loaded.
+- Stale old-palette inline fallbacks for the today/selected day backgrounds (`#eff6ff`, `#dbeafe`) now mirror the accent-derived host defaults (`color-mix` from `--hub-calendar-accent` / `--hub-calendar-accent-subtle`), so they follow custom accents even if the host declarations are unset.
+- The two bare day-cell / day-column hover transitions (`background 0.15s ease`) now match the ds base timing (`background 0.2s ease-in-out`).
+- Docs: `docs/css-variables-reference.md` default values resynchronized with the actual code declarations (now guarded by the repo-level `tokens-parity` check F).
+
 ## [22.3.0] - 2026-06-30
 
 ### Added

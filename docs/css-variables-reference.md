@@ -76,20 +76,20 @@ Defined and consumed by `projects/calendar/src/lib/styles/base.scss`.
 | Variable | Default |
 | --- | --- |
 | `--hub-calendar-bg` | `var(--hub-sys-surface-page, #ffffff)` |
-| `--hub-calendar-color` | `var(--hub-sys-text-primary, #1f2937)` |
-| `--hub-calendar-border-color` | `var(--hub-sys-border-color-default, #e5e7eb)` |
-| `--hub-calendar-border-radius` | `var(--hub-ref-radius-md, 0.5rem)` |
-| `--hub-calendar-accent` | `var(--hub-sys-color-primary, #3b82f6)` |
-| `--hub-calendar-accent-subtle` | `color-mix(in srgb, var(--hub-calendar-accent) 16%, var(--hub-calendar-bg, #fff))` |
-| `--hub-calendar-font-family` | `var(--hub-ref-font-family-base, system-ui, -apple-system, sans-serif)` |
+| `--hub-calendar-color` | `var(--hub-sys-text-primary, #212529)` |
+| `--hub-calendar-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
+| `--hub-calendar-border-radius` | `var(--hub-ref-radius-md, 0.375rem)` |
+| `--hub-calendar-accent` | `var(--hub-sys-color-primary, #0d6efd)` |
+| `--hub-calendar-accent-subtle` | `color-mix(in oklch, var(--hub-calendar-accent) 12%, var(--hub-sys-surface-page, #fff))` |
+| `--hub-calendar-font-family` | `var(--hub-ref-font-family-base, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif)` |
 | `--hub-calendar-primary` | `var(--hub-calendar-accent)` |
-| `--hub-calendar-muted` | `var(--hub-sys-text-muted, #6b7280)` |
+| `--hub-calendar-muted` | `var(--hub-sys-text-muted, #6c757d)` |
 
 ### Header
 
 | Variable | Default |
 | --- | --- |
-| `--hub-calendar-header-bg` | `var(--hub-sys-surface-elevated, #f9fafb)` |
+| `--hub-calendar-header-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` |
 | `--hub-calendar-header-padding-x` | `var(--hub-ref-space-3, 1rem)` |
 | `--hub-calendar-header-padding-y` | `var(--hub-ref-space-3, 1rem)` |
 
@@ -99,14 +99,14 @@ Defined and consumed by `projects/calendar/src/lib/styles/base.scss`.
 | --- | --- |
 | `--hub-calendar-btn-bg` | `var(--hub-ref-color-white, #ffffff)` |
 | `--hub-calendar-btn-color` | `inherit` |
-| `--hub-calendar-btn-border-color` | `var(--hub-sys-border-color-default, #e5e7eb)` |
+| `--hub-calendar-btn-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
 | `--hub-calendar-btn-border-radius` | `var(--hub-ref-radius-sm, 0.25rem)` |
 | `--hub-calendar-btn-padding-x` | `var(--hub-ref-space-3, 1rem)` |
 | `--hub-calendar-btn-padding-y` | `var(--hub-ref-space-2, 0.5rem)` |
-| `--hub-calendar-btn-hover-bg` | `#f3f4f6` |
-| `--hub-calendar-btn-active-bg` | `var(--hub-sys-color-primary, #3b82f6)` |
-| `--hub-calendar-btn-active-color` | `var(--hub-ref-color-white, #ffffff)` |
-| `--hub-calendar-btn-transition` | `var(--hub-sys-transition-base, all 0.15s ease)` |
+| `--hub-calendar-btn-hover-bg` | `var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075))` |
+| `--hub-calendar-btn-active-bg` | `var(--hub-calendar-accent)` |
+| `--hub-calendar-btn-active-color` | `var(--hub-calendar-accent-on, var(--hub-ref-color-white, #ffffff))` |
+| `--hub-calendar-btn-transition` | `var(--hub-sys-transition-base, all 0.2s ease-in-out)` |
 
 ### Day Cells
 
@@ -115,31 +115,31 @@ Defined and consumed by `projects/calendar/src/lib/styles/base.scss`.
 | `--hub-calendar-day-padding-x` | `var(--hub-ref-space-2, 0.5rem)` |
 | `--hub-calendar-day-padding-y` | `var(--hub-ref-space-2, 0.5rem)` |
 | `--hub-calendar-day-min-height` | `80px` |
-| `--hub-calendar-day-hover-bg` | `#f3f4f6` |
-| `--hub-calendar-day-today-bg` | `color-mix(in srgb, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff))` |
-| `--hub-calendar-day-other-month-bg` | `var(--hub-sys-surface-elevated, #f9fafb)` |
-| `--hub-calendar-day-other-month-color` | `#9ca3af` |
-| `--hub-calendar-day-weekend-bg` | `#fafafa` |
+| `--hub-calendar-day-hover-bg` | `var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075))` |
+| `--hub-calendar-day-today-bg` | `color-mix(in oklch, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff))` |
+| `--hub-calendar-day-other-month-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` |
+| `--hub-calendar-day-other-month-color` | `var(--hub-sys-text-muted, #6c757d)` |
+| `--hub-calendar-day-weekend-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` |
 | `--hub-calendar-day-selected-bg` | `var(--hub-calendar-accent-subtle)` |
-| `--hub-calendar-day-drag-over-bg` | `#bfdbfe` |
+| `--hub-calendar-day-drag-over-bg` | `color-mix(in oklch, var(--hub-calendar-accent) 32%, var(--hub-calendar-bg, #fff))` |
 
 ### Events
 
 | Variable | Default |
 | --- | --- |
 | `--hub-calendar-event-bg` | `var(--hub-calendar-accent)` |
-| `--hub-calendar-event-color` | `var(--hub-ref-color-white, #ffffff)` |
+| `--hub-calendar-event-color` | `var(--hub-calendar-accent-on, var(--hub-ref-color-white, #ffffff))` |
 | `--hub-calendar-event-border-radius` | `var(--hub-ref-radius-sm, 0.25rem)` |
 | `--hub-calendar-event-padding-x` | `var(--hub-ref-space-2, 0.5rem)` |
 | `--hub-calendar-event-padding-y` | `var(--hub-ref-space-1, 0.25rem)` |
-| `--hub-calendar-event-font-size` | `var(--hub-ref-font-size-sm, 0.75rem)` |
+| `--hub-calendar-event-font-size` | `var(--hub-ref-font-size-sm, 0.875rem)` |
 
 ### Year View Month Cards
 
 | Variable | Default |
 | --- | --- |
-| `--hub-calendar-month-card-bg` | `var(--hub-sys-surface-elevated, #f9fafb)` |
-| `--hub-calendar-month-card-hover-bg` | `#f3f4f6` |
+| `--hub-calendar-month-card-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` |
+| `--hub-calendar-month-card-hover-bg` | `var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075))` |
 | `--hub-calendar-month-card-padding-x` | `var(--hub-ref-space-4, 1.5rem)` |
 | `--hub-calendar-month-card-padding-y` | `var(--hub-ref-space-4, 1.5rem)` |
 

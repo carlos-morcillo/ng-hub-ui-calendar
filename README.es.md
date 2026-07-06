@@ -391,8 +391,8 @@ Dos tokens de acento respaldan este comportamiento:
 
 | Variable                       | Por Defecto                                                    | Descripción                                       |
 | ------------------------------ | -------------------------------------------------------------- | ------------------------------------------------- |
-| `--hub-calendar-accent`        | `var(--hub-sys-color-primary, #3b82f6)`                        | Acento base (botón activo, píldoras de eventos)   |
-| `--hub-calendar-accent-subtle` | `color-mix(in srgb, var(--hub-calendar-accent) 16%, var(--hub-calendar-bg, #fff))` | Acento sutil (fondo del día seleccionado)         |
+| `--hub-calendar-accent`        | `var(--hub-sys-color-primary, #0d6efd)`                        | Acento base (botón activo, píldoras de eventos)   |
+| `--hub-calendar-accent-subtle` | `color-mix(in oklch, var(--hub-calendar-accent) 12%, var(--hub-sys-surface-page, #fff))` | Acento sutil (fondo del día seleccionado)         |
 
 ### Mixin Sass `hub-calendar-theme()`
 

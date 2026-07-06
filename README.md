@@ -398,8 +398,8 @@ Two accent tokens back this behaviour:
 
 | Variable                       | Default                                                         | Description                                |
 | ------------------------------ | -------------------------------------------------------------- | ------------------------------------------ |
-| `--hub-calendar-accent`        | `var(--hub-sys-color-primary, #3b82f6)`                        | Base accent (active button, event chips)   |
-| `--hub-calendar-accent-subtle` | `color-mix(in srgb, var(--hub-calendar-accent) 16%, var(--hub-calendar-bg, #fff))` | Subtle accent (selected day background)    |
+| `--hub-calendar-accent`        | `var(--hub-sys-color-primary, #0d6efd)`                        | Base accent (active button, event chips)   |
+| `--hub-calendar-accent-subtle` | `color-mix(in oklch, var(--hub-calendar-accent) 12%, var(--hub-sys-surface-page, #fff))` | Subtle accent (selected day background)    |
 
 ### `hub-calendar-theme()` Sass Mixin
 
