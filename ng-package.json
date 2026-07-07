@@ -3,7 +3,15 @@
 	"dest": "../../dist/calendar",
 	"lib": {
 		"entryFile": "src/public-api.ts",
-		"styleIncludePaths": ["src/lib/styles"]
+		"styleIncludePaths": [
+			"src/lib/styles"
+		]
 	},
-	"assets": ["src/lib/styles"]
+	"assets": [
+		{
+			"input": "src/lib/styles",
+			"glob": "**/*",
+			"output": "styles"
+		}
+	]
 }

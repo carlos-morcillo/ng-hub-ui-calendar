@@ -1,0 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────
+// ng-hub-ui-calendar — theming entry
+// ─────────────────────────────────────────────────────────────────────────
+// Opt-in one-call theming mixin, forwarded so consumers can `@use` it from the
+// package root:
+//
+//   @use 'ng-hub-ui-calendar/styles' as *;
+// ─────────────────────────────────────────────────────────────────────────
+
+@forward 'mixins/calendar-theme';

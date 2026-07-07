@@ -2,6 +2,14 @@
 
 This document details the breaking changes introduced in major versions of `ng-hub-ui-calendar` and how to migrate your codebase.
 
+## [22.4.0] - 2026-07-07
+
+### SCSS ships at `ng-hub-ui-calendar/styles` (packaging path)
+
+- **Change**: the theming mixin now builds to `dist/calendar/styles/...` instead of `dist/calendar/src/lib/styles/...`, and a `styles/index.scss` root entry forwards it.
+- **Impact**: a `@use` that reached into the old `src/lib/styles/...` path no longer resolves.
+- **Migration**: `@use 'ng-hub-ui-calendar/styles' as *;`
+
 ## Version 22.1.0
 
 ### Removal of Shorthand Padding Tokens

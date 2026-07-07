@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.4.0] - 2026-07-07
+
+### Changed
+
+- **BREAKING (packaging) — SCSS ships at `ng-hub-ui-calendar/styles`.** The theme mixin now builds to `dist/calendar/styles/...` (was `dist/calendar/src/lib/styles/...`), so `@use 'ng-hub-ui-calendar/styles'` resolves. Update any `@use` that reached into `src/lib/styles`.
+
 ## [22.3.1] - 2026-07-02
 
 ### Fixed
