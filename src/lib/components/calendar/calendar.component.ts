@@ -5,7 +5,20 @@
  */
 
 import { DatePipe, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
-import { Component, computed, contentChild, inject, input, model, output, signal, TemplateRef } from '@angular/core';
+import {
+	afterNextRender,
+	Component,
+	computed,
+	contentChild,
+	ElementRef,
+	inject,
+	Injector,
+	input,
+	model,
+	output,
+	signal,
+	TemplateRef
+} from '@angular/core';
 import { HubOverflowTooltipDirective, HubTranslationService } from 'ng-hub-ui-utils';
 
 import { DayCellTemplateDirective } from '../../directives/day-cell-template.directive';
@@ -20,7 +33,9 @@ import { CalendarConfig, CalendarViewType, DEFAULT_CALENDAR_CONFIG } from '../..
  *
  * Features:
  * - Multiple view types: month, week, day, year
- * - Native HTML5 drag-and-drop for event rescheduling
+ * - Native HTML5 drag-and-drop for event rescheduling (pointer-only)
+ * - WAI-ARIA grid semantics and full keyboard navigation in month view
+ *   (roving tabindex, arrows, Home/End, PageUp/PageDown, Enter/Space)
  * - Custom templates for events and day cells
  * - Internationalization support via HubTranslationService
  * - CSS variables for complete styling customization
@@ -67,6 +82,19 @@ export class HubCalendarComponent<T = any> {
 	 * Falls back to built-in translations if not available.
 	 */
 	private readonly translationSvc = inject(HubTranslationService, { optional: true });
+
+	/**
+	 * Host element reference. Used to scope DOM queries (drag-over cleanup,
+	 * roving-tabindex focus restoration) to this calendar instance, which also
+	 * keeps them SSR-safe (no global `document` access).
+	 */
+	private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
+	/**
+	 * Injector handed to `afterNextRender` when restoring keyboard focus after
+	 * the month grid re-renders.
+	 */
+	private readonly injector = inject(Injector);
 
 	// =========================================================================
 	// INPUTS
@@ -217,6 +245,16 @@ export class HubCalendarComponent<T = any> {
 	});
 
 	/**
+	 * Full weekday names for accessible column-header labels.
+	 * Rotated to the configured first day of the week, mirroring `weekdayLabels`.
+	 */
+	readonly weekdayFullLabels = computed(() => {
+		const i18n = this.getTranslation('weekdaysFull') || CALENDAR_I18N['en']['weekdaysFull'];
+		const start = this.weekStartsOn();
+		return [...i18n.slice(start), ...i18n.slice(0, start)];
+	});
+
+	/**
 	 * Current month name for header display.
 	 * Localized based on locale setting.
 	 */
@@ -229,6 +267,20 @@ export class HubCalendarComponent<T = any> {
 	 * Current year for header display.
 	 */
 	readonly currentYear = computed(() => this.selectedDate().getFullYear());
+
+	/**
+	 * Accessible name of the month-view grid: the visible month and year
+	 * (e.g. "July 2026"), localized like the header title.
+	 */
+	readonly monthGridLabel = computed(() => `${this.currentMonthName()} ${this.currentYear()}`);
+
+	/**
+	 * Localized labels for the icon-only previous/next navigation buttons.
+	 */
+	readonly navLabels = computed(() => ({
+		previous: (this.getTranslation('previous') as string) || CALENDAR_I18N['en']['previous'],
+		next: (this.getTranslation('next') as string) || CALENDAR_I18N['en']['next']
+	}));
 
 	/**
 	 * Weeks array for month view.
@@ -383,6 +435,132 @@ export class HubCalendarComponent<T = any> {
 	}
 
 	// =========================================================================
+	// PUBLIC METHODS - ACCESSIBILITY
+	// =========================================================================
+
+	/**
+	 * Builds the accessible full-date label of a day cell,
+	 * e.g. "Wednesday, July 15, 2026", localized via the calendar i18n.
+	 * @param day - The day to describe
+	 * @returns Localized full-date string
+	 */
+	getDayAriaLabel(day: CalendarDay<T>): string {
+		const weekdays = this.getTranslation('weekdaysFull') || CALENDAR_I18N['en']['weekdaysFull'];
+		const months = this.getTranslation('months') || CALENDAR_I18N['en']['months'];
+		const date = day.date;
+		return `${weekdays[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+	}
+
+	/**
+	 * Builds the accessible label of a year-view month card, appending the
+	 * event count when the month has events (mirrors the visible card text).
+	 * @param month - The month summary to describe
+	 * @returns Month label (e.g. "January 2026, 3 events")
+	 */
+	getMonthAriaLabel(month: { date: Date; name: string; eventCount: number }): string {
+		const base = `${month.name} ${month.date.getFullYear()}`;
+		return month.eventCount > 0 ? `${base}, ${month.eventCount} events` : base;
+	}
+
+	// =========================================================================
+	// PUBLIC METHODS - KEYBOARD NAVIGATION
+	// =========================================================================
+
+	/**
+	 * Keyboard handler for month-view day cells, implementing the WAI-ARIA grid
+	 * navigation model with a roving tabindex. The selected day is the single
+	 * tabbable cell, so selection follows keyboard focus (matching the existing
+	 * header navigation, where previous/next also move `selectedDate`):
+	 * - Arrow keys move by one day (left/right) or one week (up/down)
+	 * - Home/End jump to the start/end of the focused week
+	 * - PageUp/PageDown move to the same day in the previous/next month
+	 * - Enter/Space activate the day (same behavior as clicking it)
+	 *
+	 * Crossing a month boundary re-renders the grid on the new month, emits
+	 * `dateChange` (mirroring the header previous/next buttons) and restores
+	 * DOM focus on the target cell after the re-render.
+	 * @param e - The keyboard event
+	 * @param day - The day cell that received the key
+	 */
+	onGridKeydown(e: KeyboardEvent, day: CalendarDay<T>): void {
+		// Ignore keys bubbling up from interactive children (e.g. event chips).
+		if (e.target !== e.currentTarget) {
+			return;
+		}
+
+		let target: Date | null = null;
+
+		switch (e.key) {
+			case 'ArrowLeft':
+				target = this.addDays(day.date, -1);
+				break;
+			case 'ArrowRight':
+				target = this.addDays(day.date, 1);
+				break;
+			case 'ArrowUp':
+				target = this.addDays(day.date, -7);
+				break;
+			case 'ArrowDown':
+				target = this.addDays(day.date, 7);
+				break;
+			case 'Home':
+				target = this.startOfWeek(day.date);
+				break;
+			case 'End':
+				target = this.addDays(this.startOfWeek(day.date), 6);
+				break;
+			case 'PageUp':
+				target = this.addMonths(day.date, -1);
+				break;
+			case 'PageDown':
+				target = this.addMonths(day.date, 1);
+				break;
+			case 'Enter':
+			case ' ':
+				e.preventDefault();
+				this.onDayClick(day);
+				return;
+			default:
+				return;
+		}
+
+		e.preventDefault();
+		this.moveFocusTo(target);
+	}
+
+	/**
+	 * Keyboard handler for event chips: Enter/Space emit `eventClick`,
+	 * mirroring the chip's click behavior. Propagation stops so the
+	 * containing day cell is not activated as well.
+	 * @param event - The calendar event represented by the chip
+	 * @param e - The keyboard event
+	 */
+	onEventKeydown(event: CalendarEvent<T>, e: KeyboardEvent): void {
+		if (e.key !== 'Enter' && e.key !== ' ') {
+			return;
+		}
+
+		e.preventDefault();
+		e.stopPropagation();
+		this.eventClick.emit(event);
+	}
+
+	/**
+	 * Keyboard handler for year-view month cards: Enter/Space open the month
+	 * in month view, mirroring the card's click behavior.
+	 * @param monthDate - The first day of the represented month
+	 * @param e - The keyboard event
+	 */
+	onMonthKeydown(monthDate: Date, e: KeyboardEvent): void {
+		if (e.key !== 'Enter' && e.key !== ' ') {
+			return;
+		}
+
+		e.preventDefault();
+		this.onMonthClick(monthDate);
+	}
+
+	// =========================================================================
 	// PUBLIC METHODS - DRAG AND DROP (Native HTML5)
 	// =========================================================================
 
@@ -475,8 +653,10 @@ export class HubCalendarComponent<T = any> {
 	onDragEnd(e: DragEvent): void {
 		this.draggedEvent = null;
 
-		// Remove any lingering drag-over classes
-		const dropZones = document.querySelectorAll('.hub-calendar__day--drag-over');
+		// Remove any lingering drag-over classes. Scoped to this calendar's host
+		// element (instead of the global `document`) so it is SSR-safe and never
+		// touches other calendar instances on the page.
+		const dropZones = this.elementRef.nativeElement.querySelectorAll('.hub-calendar__day--drag-over');
 		dropZones.forEach((zone) => zone.classList.remove('hub-calendar__day--drag-over'));
 	}
 
@@ -669,6 +849,82 @@ export class HubCalendarComponent<T = any> {
 			const checkDate = this.startOfDay(new Date(date));
 			return checkDate >= eventStart && checkDate <= eventEnd;
 		});
+	}
+
+	/**
+	 * Returns a new date offset by the given number of days.
+	 * @param date - The reference date (not mutated)
+	 * @param days - Number of days to add (may be negative)
+	 * @returns The offset date
+	 */
+	private addDays(date: Date, days: number): Date {
+		const d = new Date(date);
+		d.setDate(d.getDate() + days);
+		return d;
+	}
+
+	/**
+	 * Returns the same day-of-month in another month, clamped to the target
+	 * month's last day (e.g. Jan 31 + 1 month resolves to Feb 28/29).
+	 * @param date - The reference date (not mutated)
+	 * @param months - Number of months to add (may be negative)
+	 * @returns The offset date
+	 */
+	private addMonths(date: Date, months: number): Date {
+		const d = new Date(date);
+		const day = d.getDate();
+		d.setDate(1);
+		d.setMonth(d.getMonth() + months);
+		const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+		d.setDate(Math.min(day, lastDay));
+		return d;
+	}
+
+	/**
+	 * Returns the first day of the week containing the given date,
+	 * honoring the `weekStartsOn` input.
+	 * @param date - The reference date (not mutated)
+	 * @returns The first day of that week
+	 */
+	private startOfWeek(date: Date): Date {
+		const d = new Date(date);
+		const offset = (d.getDay() - this.weekStartsOn() + 7) % 7;
+		d.setDate(d.getDate() - offset);
+		return d;
+	}
+
+	/**
+	 * Moves the keyboard focus — and the selection, which follows it — to the
+	 * given date. Emits `dateChange` when the visible month changes (mirroring
+	 * the header previous/next buttons) and restores DOM focus on the target
+	 * cell after the grid re-renders.
+	 * @param target - The date to focus
+	 */
+	private moveFocusTo(target: Date): void {
+		const current = this.selectedDate();
+		const monthChanged = target.getMonth() !== current.getMonth() || target.getFullYear() !== current.getFullYear();
+
+		this.selectedDate.set(target);
+
+		if (monthChanged) {
+			this.dateChange.emit(target);
+		}
+
+		this.focusSelectedDayCell();
+	}
+
+	/**
+	 * Focuses the single tabbable day cell (the roving-tabindex stop) after the
+	 * next render, so keyboard focus survives grid re-renders and month changes.
+	 * `afterNextRender` never runs on the server, keeping this SSR-safe.
+	 */
+	private focusSelectedDayCell(): void {
+		afterNextRender(
+			() => {
+				this.elementRef.nativeElement.querySelector<HTMLElement>('.hub-calendar__day[tabindex="0"]')?.focus();
+			},
+			{ injector: this.injector }
+		);
 	}
 
 	/**

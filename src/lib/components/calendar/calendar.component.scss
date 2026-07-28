@@ -180,6 +180,13 @@
 			background: var(--hub-calendar-day-hover-bg, var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075)));
 		}
 
+		// Keyboard focus ring for the roving-tabindex grid cell; drawn inward
+		// so it stays visible between adjoining cell borders.
+		&:focus-visible {
+			outline: 2px solid var(--hub-calendar-accent);
+			outline-offset: -2px;
+		}
+
 		&--today {
 			background: var(--hub-calendar-day-today-bg, color-mix(in oklch, var(--hub-calendar-accent) 8%, var(--hub-calendar-bg, #fff)));
 		}
@@ -235,6 +242,13 @@
 
 		&:hover {
 			opacity: 0.9;
+		}
+
+		// Keyboard focus ring for the chip; drawn inward in the contrast
+		// colour so it reads on top of the accent-coloured chip background.
+		&:focus-visible {
+			outline: 2px solid var(--hub-calendar-accent-on, var(--hub-ref-color-white, #ffffff));
+			outline-offset: -2px;
 		}
 
 		&[draggable='true'] {
@@ -375,6 +389,12 @@
 		&:hover {
 			background: var(--hub-calendar-month-card-hover-bg, var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075)));
 			border-color: var(--hub-calendar-primary, var(--hub-sys-color-primary, #0d6efd));
+		}
+
+		// Keyboard focus ring for the year-view month card.
+		&:focus-visible {
+			outline: 2px solid var(--hub-calendar-accent);
+			outline-offset: -2px;
 		}
 	}
 

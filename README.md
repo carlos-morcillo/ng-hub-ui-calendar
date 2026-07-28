@@ -62,6 +62,7 @@ This library is part of the **Hub UI** ecosystem:
         - [Inputs](#inputs)
         - [Outputs](#outputs)
         - [Interfaces](#interfaces)
+    - [♿ Accessibility](#-accessibility)
     - [🎨 Styling](#-styling)
     - [📞 Support \& License](#-support--license)
 
@@ -74,7 +75,7 @@ This library is part of the **Hub UI** ecosystem:
 - **CSS Variables**: Complete styling customization via CSS custom properties
 - **TypeScript**: Full type definitions with CalendarViewType enum
 - **Standalone Components**: Works with modern Angular's standalone architecture
-- **Accessible**: Keyboard navigation and ARIA support
+- **Accessible**: WAI-ARIA month grid with full keyboard navigation and labelled controls
 - **Overflow tooltip**: events that clip their title with an ellipsis reveal the full text on hover (hub-ui tooltip by default, swappable with `provideHubTooltip`; requires `ng-hub-ui-utils >= 22.6.0` + `@use 'ng-hub-ui-utils/styles/tooltip';`)
 - **Lightweight**: No external dependencies (native HTML5 drag-and-drop)
 
@@ -379,6 +380,14 @@ interface CalendarConfig {
 	eventCreationEnabled?: boolean;
 }
 ```
+
+## ♿ Accessibility
+
+- **ARIA month grid**: the month view is a labelled `role="grid"` (accessible name = the visible month/year, localized) with `role="row"` / `role="columnheader"` / `role="gridcell"` semantics, `aria-selected` on the selected day, `aria-current="date"` on today and a localized full-date `aria-label` per cell.
+- **Roving tabindex — selection follows focus**: the selected day is the single tabbable cell, so moving focus with the keyboard also moves the selection, matching the header prev/next navigation model.
+- **Keyboard navigation**: Arrow keys move by day/week, `Home`/`End` jump to the start/end of the week, `PageUp`/`PageDown` move to the same day in the previous/next month (clamped to the target month, emitting `dateChange`), and `Enter`/`Space` activate the day exactly like a click (`dayClick`).
+- **Real controls**: event chips (month/week/day views) and year-view month cards are keyboard-activatable buttons (`role="button"`, `tabindex="0"`, `Enter`/`Space`); the icon-only prev/next header buttons carry localized `aria-label`s and the view switcher exposes `aria-pressed`.
+- **Pointer-only drag and drop**: rescheduling events by drag-and-drop currently has no keyboard equivalent.
 
 ## 🎨 Styling
 

@@ -56,6 +56,7 @@ Esta librería es parte del ecosistema **Hub UI**:
     - [Internacionalización](#internacionalización)
     - [Manejo de Eventos](#manejo-de-eventos)
 - [Referencia de la API](#-referencia-de-la-api)
+- [Accesibilidad](#-accesibilidad)
 - [Estilos](#-estilos)
 - [Soporte y Licencia](#-soporte-y-licencia)
 
@@ -68,7 +69,7 @@ Esta librería es parte del ecosistema **Hub UI**:
 - **Variables CSS**: Personalización completa de estilos a través de propiedades personalizadas CSS
 - **TypeScript**: Definiciones de tipos completas con CalendarViewType enum
 - **Componentes Standalone**: Funciona con la arquitectura standalone moderna de Angular
-- **Accesible**: Navegación por teclado y soporte ARIA
+- **Accesible**: Cuadrícula de mes WAI-ARIA con navegación completa por teclado y controles etiquetados
 - **Ligero**: Sin dependencias externas (arrastrar y soltar nativo de HTML5)
 
 ## 📦 Instalación
@@ -372,6 +373,14 @@ interface CalendarConfig {
 	eventCreationEnabled?: boolean;
 }
 ```
+
+## ♿ Accesibilidad
+
+- **Cuadrícula de mes ARIA**: la vista de mes es un `role="grid"` etiquetado (nombre accesible = el mes/año visible, localizado) con semántica `role="row"` / `role="columnheader"` / `role="gridcell"`, `aria-selected` en el día seleccionado, `aria-current="date"` en el día de hoy y un `aria-label` de fecha completa localizado por celda.
+- **Tabindex itinerante — la selección sigue al foco**: el día seleccionado es la única celda tabulable, de modo que mover el foco con el teclado también mueve la selección, en línea con el modelo de navegación anterior/siguiente de la cabecera.
+- **Navegación por teclado**: las flechas mueven por día/semana, `Home`/`End` saltan al inicio/fin de la semana, `PageUp`/`PageDown` van al mismo día del mes anterior/siguiente (ajustado al mes destino, emitiendo `dateChange`) y `Enter`/`Space` activan el día exactamente como un clic (`dayClick`).
+- **Controles reales**: los chips de evento (vistas de mes/semana/día) y las tarjetas de mes de la vista de año son botones activables por teclado (`role="button"`, `tabindex="0"`, `Enter`/`Space`); los botones anterior/siguiente de la cabecera, que solo muestran un icono, llevan `aria-label`s localizados y el conmutador de vistas expone `aria-pressed`.
+- **Arrastrar y soltar solo con puntero**: reprogramar eventos mediante arrastrar y soltar todavía no tiene equivalente de teclado.
 
 ## 🎨 Estilos
 

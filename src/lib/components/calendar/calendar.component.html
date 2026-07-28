@@ -1,16 +1,26 @@
 <!-- Header -->
 <div class="hub-calendar__header">
 		<div class="hub-calendar__nav">
-			<button type="button" class="hub-calendar__btn hub-calendar__btn--nav" (click)="previous()">
-				<span class="hub-calendar__icon">◀</span>
+			<button
+				type="button"
+				class="hub-calendar__btn hub-calendar__btn--nav"
+				[attr.aria-label]="navLabels().previous"
+				(click)="previous()"
+			>
+				<span class="hub-calendar__icon" aria-hidden="true">◀</span>
 			</button>
 			<button type="button" class="hub-calendar__btn hub-calendar__btn--today" (click)="goToToday()">Today</button>
-			<button type="button" class="hub-calendar__btn hub-calendar__btn--nav" (click)="next()">
-				<span class="hub-calendar__icon">▶</span>
+			<button
+				type="button"
+				class="hub-calendar__btn hub-calendar__btn--nav"
+				[attr.aria-label]="navLabels().next"
+				(click)="next()"
+			>
+				<span class="hub-calendar__icon" aria-hidden="true">▶</span>
 			</button>
 		</div>
 
-		<h2 class="hub-calendar__title">
+		<h2 class="hub-calendar__title" aria-live="polite">
 			@switch (view()) { @case ('year') {
 			{{ currentYear() }}
 			} @default {
@@ -24,6 +34,7 @@
 				type="button"
 				class="hub-calendar__btn"
 				[class.hub-calendar__btn--active]="view() === v"
+				[attr.aria-pressed]="view() === v"
 				(click)="setView(v)"
 			>
 				{{ v | titlecase }}
@@ -34,23 +45,29 @@
 
 <!-- Month View -->
 @if (view() === 'month') {
-	<div class="hub-calendar__month">
-		<div class="hub-calendar__weekdays">
-			@for (day of weekdayLabels(); track day) {
-			<div class="hub-calendar__weekday">{{ day }}</div>
+	<div class="hub-calendar__month" role="grid" [attr.aria-label]="monthGridLabel()">
+		<div class="hub-calendar__weekdays" role="row">
+			@for (day of weekdayLabels(); track day; let i = $index) {
+			<div class="hub-calendar__weekday" role="columnheader" [attr.aria-label]="weekdayFullLabels()[i]">{{ day }}</div>
 			}
 		</div>
-		<div class="hub-calendar__weeks">
+		<div class="hub-calendar__weeks" role="rowgroup">
 			@for (week of weeks(); track $index) {
-			<div class="hub-calendar__week">
+			<div class="hub-calendar__week" role="row">
 				@for (day of week.days; track day.date.getTime()) {
 				<div
 					class="hub-calendar__day"
+					role="gridcell"
 					[class.hub-calendar__day--today]="day.isToday"
 					[class.hub-calendar__day--other-month]="!day.isCurrentMonth"
 					[class.hub-calendar__day--weekend]="day.isWeekend"
 					[class.hub-calendar__day--selected]="day.isSelected"
+					[attr.tabindex]="day.isSelected ? 0 : -1"
+					[attr.aria-selected]="day.isSelected"
+					[attr.aria-current]="day.isToday ? 'date' : null"
+					[attr.aria-label]="getDayAriaLabel(day)"
 					(click)="onDayClick(day)"
+					(keydown)="onGridKeydown($event, day)"
 					(dragover)="onDragOver($event)"
 					(dragenter)="onDragEnter($event)"
 					(dragleave)="onDragLeave($event)"
@@ -64,10 +81,14 @@
 						@for (event of day.events.slice(0, 3); track event.id || $index) {
 						<div
 							class="hub-calendar__event"
+							role="button"
+							tabindex="0"
 							[class]="getEventClass(event)"
+							[attr.aria-label]="event.title"
 							[hubOverflowTooltip]="event.title"
 							[attr.draggable]="mergedConfig().dragAndDropEnabled"
 							(click)="onEventClick(event, $event)"
+							(keydown)="onEventKeydown(event, $event)"
 							(dragstart)="onDragStart(event, $event)"
 							(dragend)="onDragEnd($event)"
 						>
@@ -117,10 +138,14 @@
 					@for (event of day.events; track event.id || $index) {
 					<div
 						class="hub-calendar__event"
+						role="button"
+						tabindex="0"
 						[class]="getEventClass(event)"
+							[attr.aria-label]="event.title"
 							[hubOverflowTooltip]="event.title"
 						[attr.draggable]="mergedConfig().dragAndDropEnabled"
 						(click)="onEventClick(event, $event)"
+						(keydown)="onEventKeydown(event, $event)"
 						(dragstart)="onDragStart(event, $event)"
 						(dragend)="onDragEnd($event)"
 					>
@@ -160,10 +185,14 @@
 				@for (event of currentDay().events; track event.id || $index) {
 				<div
 					class="hub-calendar__event"
+					role="button"
+					tabindex="0"
 					[class]="getEventClass(event)"
+							[attr.aria-label]="event.title"
 							[hubOverflowTooltip]="event.title"
 					[attr.draggable]="mergedConfig().dragAndDropEnabled"
 					(click)="onEventClick(event, $event)"
+					(keydown)="onEventKeydown(event, $event)"
 					(dragstart)="onDragStart(event, $event)"
 					(dragend)="onDragEnd($event)"
 				>
@@ -189,7 +218,14 @@
 	<div class="hub-calendar__year-view">
 		<div class="hub-calendar__months-grid">
 			@for (month of months(); track month.date.getTime()) {
-			<div class="hub-calendar__month-card" (click)="onMonthClick(month.date)">
+			<div
+				class="hub-calendar__month-card"
+				role="button"
+				tabindex="0"
+				[attr.aria-label]="getMonthAriaLabel(month)"
+				(click)="onMonthClick(month.date)"
+				(keydown)="onMonthKeydown(month.date, $event)"
+			>
 				<span class="hub-calendar__month-name">{{ month.name }}</span>
 				@if (month.eventCount > 0) {
 				<span class="hub-calendar__month-events">{{ month.eventCount }} events</span>
