@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.5.0] - 2026-07-28
+
+### Added
+
+- **Accessibility layer (WAI-ARIA grid + keyboard navigation).** The month view is now exposed as a labelled `role="grid"` (accessible name = the visible month/year, localized): weekday headers are `role="columnheader"` cells in a `role="row"`, week rows are `role="row"` inside a `role="rowgroup"`, and day cells are `role="gridcell"` with `aria-selected` (selected day), `aria-current="date"` (today) and a localized full-date `aria-label` (e.g. "Wednesday, July 15, 2026", built from the calendar i18n tables).
+- **Keyboard navigation on the month grid** with a roving tabindex — the selected day is the single tabbable cell, so selection follows keyboard focus, matching the existing header navigation model where previous/next also move `selectedDate`. Arrow keys move by day/week, Home/End jump to the start/end of the week, PageUp/PageDown move to the same day in the previous/next month (clamped to the target month's last day, and emitting `dateChange` like the header buttons), and Enter/Space activate the day exactly like a click (`dayClick`). DOM focus is restored on the target cell after the grid re-renders, so it survives month changes.
+- **Interactive elements are now real controls.** Event chips (month, week and day views) and year-view month cards expose `role="button"`, `tabindex="0"`, an `aria-label` and Enter/Space activation wired to the same outputs as their click handlers (`eventClick` / month drill-down). The icon-only previous/next header buttons gained localized `aria-label`s (their glyphs are `aria-hidden`), the view-switcher buttons expose `aria-pressed`, and the header title is an `aria-live="polite"` region so month changes are announced.
+- **Keyboard focus rings** (`:focus-visible`) on day cells, event chips and month cards, derived from the existing `--hub-calendar-accent` / `--hub-calendar-accent-on` tokens (no new tokens).
+- **Starter unit test suite** (`calendar.component.spec.ts`, 23 specs): creation, month grid rendering, view switching, day/event/month-card activation by mouse and keyboard, roving tabindex and month-crossing navigation, and ARIA attribute coverage. The monorepo test runner picks the library up automatically now that it ships specs.
+
+### Fixed
+
+- **SSR-safe drag-end cleanup.** `onDragEnd` cleaned up lingering drag-over classes via a bare `document.querySelectorAll`, which breaks on the server; the query is now scoped to the component's own host element (also preventing one calendar instance from touching another's cells).
+
+### Notes
+
+- Drag-and-drop event rescheduling remains **pointer-only**; a keyboard rescheduling interaction is intentionally out of scope for this release.
+
 ## [22.4.1] - 2026-07-26
 
 ### Fixed
