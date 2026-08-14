@@ -262,6 +262,15 @@ export class I18nComponent {}
 // }
 ```
 
+#### Transloco y ngx-translate
+
+Calendar lee el diccionario `calendar` desde `HubTranslationService`. Configura `provideHubTranslationAdapter()` una sola vez en `app.config.ts` con el diccionario activo completo y vincula el idioma activo a `locale`. Calendar se vuelve a renderizar cuando el proveedor emite.
+
+```typescript
+// La fuente del adaptador emite { calendar: { ... } } al cambiar el idioma externo.
+// Actualiza también [locale] con el código del idioma activo.
+```
+
 ### Manejo de Eventos
 
 ```typescript

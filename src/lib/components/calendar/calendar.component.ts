@@ -5,6 +5,7 @@
  */
 
 import { DatePipe, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
 	afterNextRender,
 	Component,
@@ -82,6 +83,11 @@ export class HubCalendarComponent<T = any> {
 	 * Falls back to built-in translations if not available.
 	 */
 	private readonly translationSvc = inject(HubTranslationService, { optional: true });
+
+	/** Tracks external dictionary emissions so direct calendar lookups refresh OnPush views. */
+	private readonly translationSnapshot = this.translationSvc
+		? toSignal(this.translationSvc.translationObserver, { initialValue: {} })
+		: signal({});
 
 	/**
 	 * Host element reference. Used to scope DOM queries (drag-over cleanup,
@@ -702,8 +708,10 @@ export class HubCalendarComponent<T = any> {
 	 * @returns The translated value
 	 */
 	private getTranslation(key: string): any {
+		this.translationSnapshot();
 		if (this.translationSvc) {
-			const translated = this.translationSvc.getTranslation(`calendar.${key}`);
+			const translated =
+				this.translationSvc.getTranslation(`HUBUI.CALENDAR.${key}`) ?? this.translationSvc.getTranslation(`calendar.${key}`);
 			// Check if translation exists (not just the key returned back)
 			if (translated !== undefined && translated !== `calendar.${key}`) {
 				return translated;

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.6.0] - 2026-08-14
+
+### Changed
+
+- **Labels now resolve `HUBUI.CALENDAR.*` before the legacy `calendar.*` branch.** The collision-safe namespace lets an application dictionary feed the calendar through `provideHubTranslationAdapter()` without reserving a top-level `calendar` key. Existing `calendar.*` dictionaries keep working — the legacy branch is still the fallback.
+- **Dictionary changes are now reactive.** The component tracks translation-source emissions, so switching language refreshes the calendar labels instead of leaving the strings resolved at first render under `OnPush`.
+
+### Added
+
+- README documentation for the application-wide translation adapter (`provideHubTranslationAdapter()` from `ng-hub-ui-utils`).
+
 ## [22.5.1] - 2026-08-08
 
 ### Fixed
