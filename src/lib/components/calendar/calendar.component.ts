@@ -4,7 +4,7 @@
  * Features native HTML5 drag-and-drop, custom templates, and i18n support.
  */
 
-import { DatePipe, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
+import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
 	afterNextRender,
@@ -68,7 +68,7 @@ const CALENDAR_BUILT_IN_VARIANTS = new Set<string>(['primary', 'success', 'dange
 @Component({
 	selector: 'hub-calendar',
 	standalone: true,
-	imports: [DatePipe, NgTemplateOutlet, TitleCasePipe, HubOverflowTooltipDirective],
+	imports: [DatePipe, NgTemplateOutlet, HubOverflowTooltipDirective],
 	templateUrl: './calendar.component.html',
 	styleUrl: './calendar.component.scss',
 	host: {
@@ -284,9 +284,26 @@ export class HubCalendarComponent<T = any> {
 	 * Localized labels for the icon-only previous/next navigation buttons.
 	 */
 	readonly navLabels = computed(() => ({
-		previous: (this.getTranslation('previous') as string) || CALENDAR_I18N['en']['previous'],
-		next: (this.getTranslation('next') as string) || CALENDAR_I18N['en']['next']
+		previous: this.label('previous'),
+		next: this.label('next')
 	}));
+
+	/**
+	 * Visible text of the "today" shortcut in the header.
+	 */
+	readonly todayLabel = computed(() => this.label('today'));
+
+	/**
+	 * Visible text of each view-switcher button, keyed by the view it selects.
+	 *
+	 * The dictionary already carries `month` / `week` / `day` / `year` under exactly the enum's
+	 * own values, so the switcher reads from the same source as the weekday and month names.
+	 * Title-casing the enum instead is what made one calendar render its days in Spanish and its
+	 * buttons in English, with nothing a consumer could pass to reconcile them.
+	 */
+	readonly viewLabels = computed<Record<string, string>>(() =>
+		Object.fromEntries(this.mergedConfig().availableViews.map((view) => [view, this.label(view)]))
+	);
 
 	/**
 	 * Weeks array for month view.
@@ -700,6 +717,19 @@ export class HubCalendarComponent<T = any> {
 	// =========================================================================
 	// PRIVATE METHODS - TRANSLATION
 	// =========================================================================
+
+	/**
+	 * One localized string, falling back to the built-in English entry.
+	 *
+	 * The extra fallback is not redundant with `getTranslation`: a locale registered with only
+	 * some of the keys filled in resolves the rest to `undefined`, and a header button is better
+	 * in English than blank.
+	 * @param key - The translation key (e.g. `'today'`, `'month'`)
+	 * @returns The localized label
+	 */
+	private label(key: string): string {
+		return (this.getTranslation(key) as string) || (CALENDAR_I18N['en'][key] as string);
+	}
 
 	/**
 	 * Gets a translation for the given key.

@@ -9,7 +9,9 @@
 			>
 				<span class="hub-calendar__icon" aria-hidden="true">◀</span>
 			</button>
-			<button type="button" class="hub-calendar__btn hub-calendar__btn--today" (click)="goToToday()">Today</button>
+			<button type="button" class="hub-calendar__btn hub-calendar__btn--today" (click)="goToToday()">
+				{{ todayLabel() }}
+			</button>
 			<button
 				type="button"
 				class="hub-calendar__btn hub-calendar__btn--nav"
@@ -37,7 +39,7 @@
 				[attr.aria-pressed]="view() === v"
 				(click)="setView(v)"
 			>
-				{{ v | titlecase }}
+				{{ viewLabels()[v] }}
 			</button>
 			}
 		</div>

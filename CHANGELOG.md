@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.6.1] - 2026-08-16
+
+### Fixed
+
+- **The header buttons ignored the locale.** `Today` was written into the template by hand and the view switcher title-cased the enum, while the weekday and month names came from the dictionary — so a calendar with `locale="es"` rendered "Lun, Mar, Mié" underneath "Today / Month / Week / Day / Year". Nothing a consumer passed could reconcile the two: not `locale`, not the injected `HubTranslationService`, not CSS.
+
+    All five labels now resolve through the same lookup as the day and month names, honouring the translation service first and falling back to the built-in dictionary — which is the contract the component already documented. `today`, `week`, `day`, `month` and `year` were present and complete in both bundled locales the whole time; only the template was not asking for them. With `locale="es"` the header now reads Hoy / Mes / Semana / Día / Año, and English is unchanged.
+
 ## [22.6.0] - 2026-08-14
 
 ### Changed

@@ -289,4 +289,63 @@ describe('HubCalendarComponent', () => {
 			expect((nav[1] as HTMLElement).getAttribute('aria-label')).toBe('Next');
 		});
 	});
+
+	/**
+	 * The header buttons were written into the template by hand — `Today`, and the view names
+	 * title-cased off the enum — while the weekday and month names came from the dictionary.
+	 * One calendar therefore rendered "Lun, Mar, Mié" beside "Today / Month / Week", and no
+	 * input could reconcile the two: not `locale`, not the injected translation service.
+	 */
+	describe('Header localization', () => {
+		/** Visible text of the view switcher, in the order the switcher renders it. */
+		function viewButtons(): string[] {
+			return [...(fixture.nativeElement as HTMLElement).querySelectorAll('.hub-calendar__views .hub-calendar__btn')].map(
+				(btn) => (btn.textContent ?? '').trim()
+			);
+		}
+
+		function todayButton(): string {
+			return (
+				(fixture.nativeElement as HTMLElement).querySelector('.hub-calendar__btn--today')?.textContent ?? ''
+			).trim();
+		}
+
+		function weekdays(): string[] {
+			return [...(fixture.nativeElement as HTMLElement).querySelectorAll('.hub-calendar__weekday')].map((el) =>
+				(el.textContent ?? '').trim()
+			);
+		}
+
+		it('reads the header buttons from the dictionary under the default locale', () => {
+			expect(todayButton()).toBe('Today');
+			expect(viewButtons()).toEqual(['Month', 'Week', 'Day', 'Year']);
+		});
+
+		it('follows the locale input into Spanish', () => {
+			componentRef.setInput('locale', 'es');
+			fixture.detectChanges();
+
+			expect(todayButton()).toBe('Hoy');
+			expect(viewButtons()).toEqual(['Mes', 'Semana', 'Día', 'Año']);
+		});
+
+		/** The point of the fix: one calendar, one language — chrome and data alike. */
+		it('localizes the buttons from the same dictionary as the weekday names', () => {
+			componentRef.setInput('locale', 'es');
+			fixture.detectChanges();
+
+			expect(weekdays()).toEqual(['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']);
+			expect([todayButton(), ...viewButtons()].every((text) => /[A-Za-zÀ-ÿ]/.test(text))).toBe(true);
+			expect([todayButton(), ...viewButtons()]).not.toContain('Today');
+		});
+
+		/** A switcher trimmed by config still labels what it does render. */
+		it('labels only the views the config leaves available', () => {
+			componentRef.setInput('locale', 'es');
+			componentRef.setInput('config', { availableViews: [CalendarViewType.WEEK, CalendarViewType.YEAR] });
+			fixture.detectChanges();
+
+			expect(viewButtons()).toEqual(['Semana', 'Año']);
+		});
+	});
 });
