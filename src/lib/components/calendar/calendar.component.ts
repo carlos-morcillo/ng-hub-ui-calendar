@@ -741,7 +741,8 @@ export class HubCalendarComponent<T = any> {
 		this.translationSnapshot();
 		if (this.translationSvc) {
 			const translated =
-				this.translationSvc.getTranslation(`HUBUI.CALENDAR.${key}`) ?? this.translationSvc.getTranslation(`calendar.${key}`);
+				this.translationSvc.getTranslation(`HUBUI.CALENDAR.${key}`) ??
+				this.translationSvc.getTranslation(`calendar.${key}`);
 			// Check if translation exists (not just the key returned back)
 			if (translated !== undefined && translated !== `calendar.${key}`) {
 				return translated;
