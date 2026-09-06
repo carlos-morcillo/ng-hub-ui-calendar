@@ -348,4 +348,200 @@ describe('HubCalendarComponent', () => {
 			expect(viewButtons()).toEqual(['Semana', 'Año']);
 		});
 	});
+
+	/**
+	 * `locale` is a public input, and half the chrome ignored it: the overflow chip and the
+	 * year-view card were English literals, the month-card `aria-label` announced the English
+	 * word "events", and the week/day headings read their names off `DatePipe` — that is, the
+	 * application `LOCALE_ID` — instead of the calendar dictionary the rest of the view uses.
+	 */
+	describe('Locale coverage beyond the header', () => {
+		/** Five events on July 15, so the month cell overflows its three-chip cap by two. */
+		const crowdedDay: CalendarEvent[] = Array.from({ length: 5 }, (_, i) => ({
+			id: i + 1,
+			title: `Reunion ${i + 1}`,
+			start: new Date(2026, 6, 15, 9 + i, 0)
+		}));
+
+		function textOf(selector: string): string {
+			return ((fixture.nativeElement as HTMLElement).querySelector(selector)?.textContent ?? '').trim();
+		}
+
+		function inSpanish(): void {
+			componentRef.setInput('locale', 'es');
+			fixture.detectChanges();
+		}
+
+		describe('Month-view overflow chip', () => {
+			beforeEach(() => {
+				componentRef.setInput('events', crowdedDay);
+				fixture.detectChanges();
+			});
+
+			it('counts the hidden events in English by default', () => {
+				expect(textOf('.hub-calendar__more')).toBe('+2 more');
+			});
+
+			it('follows the locale input', () => {
+				inSpanish();
+
+				expect(textOf('.hub-calendar__more')).toBe('+2 más');
+			});
+		});
+
+		describe('Year-view month cards', () => {
+			beforeEach(() => {
+				componentRef.setInput('view', CalendarViewType.YEAR);
+				fixture.detectChanges();
+			});
+
+			/** July holds the two events of the default fixture. */
+			function julyCard(): HTMLElement {
+				return [
+					...(fixture.nativeElement as HTMLElement).querySelectorAll('.hub-calendar__month-card')
+				][6] as HTMLElement;
+			}
+
+			function julyCount(): string {
+				return (julyCard().querySelector('.hub-calendar__month-events')?.textContent ?? '').trim();
+			}
+
+			it('renders the count and its accessible name in English by default', () => {
+				expect(julyCount()).toBe('2 events');
+				expect(julyCard().getAttribute('aria-label')).toBe('July 2026, 2 events');
+			});
+
+			it('localizes the visible count and the accessible name alike', () => {
+				inSpanish();
+
+				expect(julyCount()).toBe('2 eventos');
+				expect(julyCard().getAttribute('aria-label')).toBe('Julio 2026, 2 eventos');
+			});
+		});
+
+		describe('Week-view day headers', () => {
+			beforeEach(() => {
+				componentRef.setInput('view', CalendarViewType.WEEK);
+				fixture.detectChanges();
+			});
+
+			function dayNames(): string[] {
+				return [...(fixture.nativeElement as HTMLElement).querySelectorAll('.hub-calendar__day-name')].map((el) =>
+					(el.textContent ?? '').trim()
+				);
+			}
+
+			it('names the days from the dictionary instead of the application LOCALE_ID', () => {
+				expect(dayNames()).toEqual(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
+
+				inSpanish();
+
+				expect(dayNames()).toEqual(['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']);
+			});
+		});
+
+		describe('Day-view heading', () => {
+			beforeEach(() => {
+				componentRef.setInput('view', CalendarViewType.DAY);
+				fixture.detectChanges();
+			});
+
+			it('follows the locale input like the rest of the chrome', () => {
+				expect(textOf('.hub-calendar__day-view-header h3')).toBe('Wednesday, July 15, 2026');
+
+				inSpanish();
+
+				expect(textOf('.hub-calendar__day-view-header h3')).toBe('Miércoles, Julio 15, 2026');
+			});
+		});
+
+		/** The whole point: with locale="es", nothing rendered or announced is left in English. */
+		it('leaves no English word visible or announced in any view', () => {
+			const english =
+				/\b(more|events?|today|previous|next|month|week|day|year|sun|mon|tue|wed|thu|fri|sat|january|february|march|april|june|july|august|september|october|november|december)\b/i;
+			const host = fixture.nativeElement as HTMLElement;
+
+			componentRef.setInput('events', crowdedDay);
+			inSpanish();
+
+			for (const view of [CalendarViewType.MONTH, CalendarViewType.WEEK, CalendarViewType.DAY, CalendarViewType.YEAR]) {
+				componentRef.setInput('view', view);
+				fixture.detectChanges();
+
+				const announced = [...host.querySelectorAll('[aria-label]')].map((el) => el.getAttribute('aria-label') ?? '');
+				for (const rendered of [host.textContent ?? '', ...announced]) {
+					expect(rendered).not.toMatch(english);
+				}
+			}
+		});
+	});
+
+	/**
+	 * `config.weekStartsOn` was documented as the base value and the input as its override,
+	 * but only the input was ever read — a shared `CalendarConfig` silently kept Sunday.
+	 */
+	describe('First day of the week', () => {
+		function weekdayHeaders(): string[] {
+			return [...(fixture.nativeElement as HTMLElement).querySelectorAll('.hub-calendar__weekday')].map((el) =>
+				(el.textContent ?? '').trim()
+			);
+		}
+
+		it('starts on Sunday when neither the input nor the config says otherwise', () => {
+			expect(weekdayHeaders()).toEqual(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
+		});
+
+		it('honours config.weekStartsOn when the input is left unbound', () => {
+			componentRef.setInput('config', { weekStartsOn: 1 });
+			fixture.detectChanges();
+
+			expect(weekdayHeaders()).toEqual(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
+		});
+
+		/** July 2026 opens on a Wednesday, so a Monday-first grid has to start on June 29. */
+		it('builds the month grid from the configured first day', () => {
+			componentRef.setInput('config', { weekStartsOn: 1 });
+			fixture.detectChanges();
+
+			expect(dayCells()[0].textContent).toContain('29');
+		});
+
+		it('lets the input override config.weekStartsOn', () => {
+			componentRef.setInput('config', { weekStartsOn: 1 });
+			componentRef.setInput('weekStartsOn', 3);
+			fixture.detectChanges();
+
+			expect(weekdayHeaders()[0]).toBe('Wed');
+		});
+	});
+
+	/**
+	 * The SCSS emits a `:host([data-variant])` block for each of the nine canonical accents, so
+	 * an inline accent written for four of them outranked any consumer rule re-pointing them.
+	 */
+	describe('Semantic accent', () => {
+		const canonical = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'neutral', 'light', 'dark'];
+
+		function inlineAccent(): string {
+			return (fixture.nativeElement as HTMLElement).style.getPropertyValue('--hub-calendar-accent');
+		}
+
+		it('leaves the nine canonical variants to the stylesheet', () => {
+			const written = canonical.map((variant) => {
+				componentRef.setInput('variant', variant);
+				fixture.detectChanges();
+				return inlineAccent();
+			});
+
+			expect(written).toEqual(canonical.map(() => ''));
+		});
+
+		it('still resolves a custom variant inline, with no stylesheet rule to lean on', () => {
+			componentRef.setInput('variant', 'brand');
+			fixture.detectChanges();
+
+			expect((fixture.nativeElement as HTMLElement).getAttribute('data-variant')).toBe('brand');
+			expect(inlineAccent()).toBe('var(--hub-sys-color-brand)');
+		});
+	});
 });

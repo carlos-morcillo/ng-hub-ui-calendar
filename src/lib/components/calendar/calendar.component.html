@@ -109,7 +109,7 @@
 										</div>
 									}
 									@if (day.events.length > 3) {
-										<span class="hub-calendar__more">+{{ day.events.length - 3 }} more</span>
+										<span class="hub-calendar__more">{{ getMoreEventsLabel(day.events.length - 3) }}</span>
 									}
 								</div>
 							}
@@ -141,7 +141,7 @@
 					(drop)="onDrop(day, $event)"
 				>
 					<div class="hub-calendar__day-header">
-						<span class="hub-calendar__day-name">{{ day.date | date: 'EEE' }}</span>
+						<span class="hub-calendar__day-name">{{ getWeekdayLabel(day.date) }}</span>
 						<span class="hub-calendar__day-number">{{ day.date | date: 'd' }}</span>
 					</div>
 					<div class="hub-calendar__day-events">
@@ -177,7 +177,7 @@
 @if (view() === 'day') {
 	<div class="hub-calendar__day-view">
 		<div class="hub-calendar__day-view-header">
-			<h3>{{ currentDay().date | date: 'EEEE, MMMM d, y' }}</h3>
+			<h3>{{ currentDayLabel() }}</h3>
 		</div>
 		<div class="hub-calendar__time-grid">
 			<div class="hub-calendar__time-column">
@@ -238,7 +238,7 @@
 				>
 					<span class="hub-calendar__month-name">{{ month.name }}</span>
 					@if (month.eventCount > 0) {
-						<span class="hub-calendar__month-events">{{ month.eventCount }} events</span>
+						<span class="hub-calendar__month-events">{{ getEventCountLabel(month.eventCount) }}</span>
 					}
 				</div>
 			}

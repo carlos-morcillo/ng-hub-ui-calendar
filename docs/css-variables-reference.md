@@ -80,7 +80,9 @@ Defined and consumed by `projects/calendar/src/lib/styles/base.scss`.
 | `--hub-calendar-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
 | `--hub-calendar-border-radius` | `var(--hub-ref-radius-md, 0.375rem)` |
 | `--hub-calendar-accent` | `var(--hub-sys-color-primary, #0d6efd)` |
+| `--hub-calendar-accent-emphasis` | `color-mix(in oklch, var(--hub-calendar-accent) 80%, var(--hub-sys-color-ink, #212529))` |
 | `--hub-calendar-accent-subtle` | `color-mix(in oklch, var(--hub-calendar-accent) 12%, var(--hub-sys-surface-page, #fff))` |
+| `--hub-calendar-accent-on` | `oklch(from var(--hub-calendar-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h)` |
 | `--hub-calendar-font-family` | `var(--hub-ref-font-family-base, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif)` |
 | `--hub-calendar-primary` | `var(--hub-calendar-accent)` |
 | `--hub-calendar-muted` | `var(--hub-sys-text-muted, #6c757d)` |

@@ -15,6 +15,7 @@
  * - today, week, day, month, year: View labels
  * - previous, next: Navigation labels
  * - allDay: Label for all-day events
+ * - moreEvents, eventCount: Count labels; `{count}` is replaced with the number
  *
  * @example Adding a new language
  * ```typescript
@@ -26,12 +27,16 @@
  * ```
  *
  * @example Using with HubTranslationService
- * The component will automatically look for translations under the 'calendar' namespace:
+ * The component looks under `HUBUI.CALENDAR.*` first and falls back to the legacy
+ * top-level `calendar.*` branch, so an application dictionary can feed the calendar
+ * without reserving a top-level `calendar` key:
  * ```json
  * {
- *   "calendar": {
- *     "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
- *     "months": ["January", "February", ...]
+ *   "HUBUI": {
+ *     "CALENDAR": {
+ *       "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+ *       "months": ["January", "February", ...]
+ *     }
  *   }
  * }
  * ```
@@ -65,7 +70,9 @@ export const CALENDAR_I18N: Record<string, Record<string, any>> = {
 		year: 'Year',
 		previous: 'Previous',
 		next: 'Next',
-		allDay: 'All day'
+		allDay: 'All day',
+		moreEvents: '+{count} more',
+		eventCount: '{count} events'
 	},
 	/**
 	 * Spanish translations
@@ -95,6 +102,8 @@ export const CALENDAR_I18N: Record<string, Record<string, any>> = {
 		year: 'Año',
 		previous: 'Anterior',
 		next: 'Siguiente',
-		allDay: 'Todo el día'
+		allDay: 'Todo el día',
+		moreEvents: '+{count} más',
+		eventCount: '{count} eventos'
 	}
 };

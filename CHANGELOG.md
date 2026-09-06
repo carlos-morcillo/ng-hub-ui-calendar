@@ -2,6 +2,72 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.6.4] - 2026-09-06
+
+### Fixed
+
+- **`locale` stopped at the header.** 22.6.1 pulled the header buttons into the dictionary and left the rest behind: the month cell still overflowed into `+2 more`, a year-view card still read `3 events`, that same card announced `, 3 events` to a screen reader, and the week and day headings took their weekday and month names from `DatePipe` — the application's `LOCALE_ID`, not the calendar's `locale`. A calendar set to Spanish therefore mixed both languages inside one grid, and, as in 22.6.1, nothing a consumer passed could reconcile them: the two literals were written into the template and the bundled dictionaries had no key to override them.
+
+    All four now resolve through the same lookup as the weekday and month names. The count labels arrive as two new dictionary keys, `moreEvents` and `eventCount`, each carrying a `{count}` placeholder so a locale can move the number, drop the `+` or add a word after it — a consumer dictionary (`HUBUI.CALENDAR.*`, or the legacy `calendar.*`) can now reach them, and an unfilled key still falls back to English rather than rendering blank. The week-view day names and the day-view heading are built from `weekdays` / `weekdaysFull` / `months`, which is what makes them follow `locale` instead of `LOCALE_ID`; English output is unchanged, and applications whose `LOCALE_ID` already matched their `locale` see no difference either.
+
+- **`config.weekStartsOn` decided nothing.** The `weekStartsOn` input documented itself as an override of the config field, but it was the only value any grid ever read — so an application that centralised its calendar settings in a shared `CalendarConfig` still opened every calendar on Sunday, and the only way out was repeating `[weekStartsOn]` on every template. The precedence the JSDoc promised now holds: the input wins when it is bound, the config answers when it is not, and Sunday remains the default of last resort. To tell "not bound" from "explicitly Sunday", the input no longer defaults to `0` — its type is now `0 | 1 | 2 | 3 | 4 | 5 | 6 | undefined`, which only matters to code that reads the signal directly; every template binding keeps working unchanged.
+
+- **Four of the nine accents could not be re-pointed from a stylesheet.** `secondary`, `neutral`, `light` and `dark` were treated as foreign variants, so the component wrote `--hub-calendar-accent` as an inline style on the host — which outranks any consumer rule, including the `hub-calendar[data-variant='…'] { --hub-calendar-accent: … }` recipe the library itself documents. All nine canonical variants now resolve through the stylesheet, as `secondary`/`neutral`/`light`/`dark` already did in the SCSS since 22.2.0. Rendering is unchanged; what changes is that a consumer rule now takes effect. Custom variants keep their inline fallback, since no stylesheet rule backs them.
+
+- **`BREAKING_CHANGES.md` sent readers to a file that no longer exists.** The 21.0.0 migration told them to
+  `@use 'ng-hub-ui-calendar/src/lib/styles/calendar.scss'` — a path emptied first by 21.1.1, when the
+  stylesheet moved next to the component and stopped needing an import at all, and then by 22.4.0, when the
+  theming entry became `ng-hub-ui-calendar/styles`. The same section also filed the `base.scss` rename under
+  21.0.0 although it shipped in 22.0.0, and the preamble promised breaking changes "in major versions",
+  which this library cannot deliver: its major tracks the Angular major it targets, so a break arrives in a
+  minor and this file is the only warning a reader gets. Each break now sits under the version that shipped
+  it, with a migration that resolves, and the variable count that used to be quoted as "exactly 37" is gone
+  rather than left to drift again.
+
+- **The README omitted `selectedDateChange`** from its outputs table, so a reader working from the table
+  alone had no way to know `[(selectedDate)]` had a two-way half. It also documented the translation
+  dictionary as the top-level `calendar.*` namespace only, and the `CALENDAR_I18N` JSDoc said the same,
+  while 22.6.0 made `HUBUI.CALENDAR.*` resolve first — the namespace that exists precisely so an
+  application dictionary need not reserve a top-level `calendar` key. Both now lead with `HUBUI.CALENDAR.*`
+  and keep the legacy branch documented as the fallback.
+
+- **Changelog heading order.** The 21.1.1 entry sat between 22.1.0 and 22.0.0, which makes the file
+  unreadable as a history and unreliable as a source for the documentation site that mirrors it.
+
+- **The CSS variables reference called itself complete while two accent tokens were missing.**
+  `--hub-calendar-accent-emphasis` and `--hub-calendar-accent-on` are declared by the component and were
+  announced in 22.2.0 as part of the accent family, yet the only file that catalogues the tokens listed
+  neither — and the repo-level parity check cannot catch the omission, because it exempts the accent slots
+  and only compares rows that already exist. A reader taking the file at its word had no way to learn the
+  two roles are overridable, least of all `-on`, the one that decides whether text on the accent is
+  readable. The table now covers all 44 declared tokens.
+
+### Added
+
+- **`FUNCTIONALITIES.md`.** Nine other libraries in the monorepo ship one; the calendar had no single place
+  showing what the component actually supports and how much of it a running example demonstrates. The table
+  is written against the code, so the accessibility layer and the application-dictionary path are marked as
+  supported but unexampled instead of being implied to be covered.
+
+### Changed
+
+- **The component now declares `ChangeDetectionStrategy.OnPush`.** Its own JSDoc and the 22.6.0 entry both
+  describe the calendar as running under OnPush, and every sibling library in the monorepo says so in its
+  metadata, but this one never did — leaving the reader to guess. Nothing changes at runtime: Angular 22
+  already applies OnPush unless a component opts into `Eager`, and every value the template reads is a
+  signal. What changes is that the source now states the contract instead of relying on the framework
+  default staying where it is.
+
+### Deprecated
+
+- **`CalendarModule`, marked for removal in 23.0.0.** The class documented itself as the path for
+  "legacy applications using NgModule-based architecture" but carried no `@deprecated` tag, so
+  neither an editor nor the build warned anyone it was on its way out. It now says so. The module
+  imports and exports `HubCalendarComponent`, `EventTemplateDirective` and
+  `DayCellTemplateDirective` — all three standalone, all three already exported from the entry
+  point — and provides nothing of its own, so importing them directly is the whole migration. See
+  `BREAKING_CHANGES.md`.
+
 ## [22.6.3] - 2026-09-01
 
 ### Changed
@@ -129,6 +195,13 @@ All notable changes to this project will be documented in this file.
 
 - Replaced the uniform `padding` shorthands (`--hub-calendar-day-padding`, `--hub-calendar-header-padding`, `--hub-calendar-month-card-padding`) with the canonical directional `-padding-x` / `-padding-y` tokens. No visual change. **BREAKING**: set the `-x`/`-y` tokens instead of the removed shorthand.
 
+## [22.0.0] - 2026-03-10
+
+### Changed
+
+- **BREAKING CHANGE:** Renamed the global `src/lib/styles/base.scss` file to `src/lib/styles/calendar.scss`.
+- Added host class `.hub-calendar` directly to the `hub-calendar` element for better encapsulation.
+
 ## [21.1.1] - 2026-03-19
 
 ### Changed
@@ -146,13 +219,6 @@ All notable changes to this project will be documented in this file.
   intrinsic content width from expanding grid columns beyond their allotted space.
 - Added `width: 100%; max-width: 100%; box-sizing: border-box` to event elements to
   ensure proper clipping within day cell boundaries.
-
-## [22.0.0] - 2026-03-10
-
-### Changed
-
-- **BREAKING CHANGE:** Renamed the global `src/lib/styles/base.scss` file to `src/lib/styles/calendar.scss`.
-- Added host class `.hub-calendar` directly to the `hub-calendar` element for better encapsulation.
 
 ## [21.0.0] - 2026-03-09
 

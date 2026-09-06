@@ -10,12 +10,13 @@ import { DayCellTemplateDirective } from './directives/day-cell-template.directi
 import { EventTemplateDirective } from './directives/event-template.directive';
 
 /**
- * NgModule for ng-hub-ui-calendar.
+ * Backward-compatibility module for NgModule-based applications.
  *
- * Use this module for legacy applications using NgModule-based architecture.
- * For modern Angular apps (v14+), import components directly as standalone.
+ * @deprecated Import the standalone `HubCalendarComponent`, `EventTemplateDirective` and
+ * `DayCellTemplateDirective` directly; this module only re-exports them and provides nothing
+ * of its own. Scheduled for removal in **23.0.0**.
  *
- * @example NgModule usage
+ * @example NgModule usage (deprecated)
  * ```typescript
  * import { CalendarModule } from 'ng-hub-ui-calendar';
  *

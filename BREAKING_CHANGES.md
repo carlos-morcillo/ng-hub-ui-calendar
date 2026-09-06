@@ -1,6 +1,28 @@
 # Breaking Changes in `ng-hub-ui-calendar`
 
-This document details the breaking changes introduced in major versions of `ng-hub-ui-calendar` and how to migrate your codebase.
+This document details the breaking changes of `ng-hub-ui-calendar` and how to migrate your codebase.
+
+The major version tracks the Angular major the library targets, so it cannot also signal a break: a breaking change ships in a **minor** release and is announced here. This file — not the version number — is the warning.
+
+## [22.6.4] - 2026-09-06
+
+### Announced: `CalendarModule` is removed in 23.0.0
+
+- **Change**: the class is now marked `@deprecated`. Nothing is removed here and nothing changes at runtime — this release is the notice, and the removal lands in 23.0.0, the next version that tracks a new Angular major.
+- **Impact**: from 23.0.0 the symbol is gone from the entry point, so `import { CalendarModule }` and `imports: [CalendarModule]` stop compiling.
+- **Migration**: import the three standalone declarables the module re-exported. All three come from the same entry point, and the module provided nothing else.
+
+```ts
+// Before
+@NgModule({ imports: [CalendarModule] })
+export class AppModule {}
+
+// After
+@Component({
+	imports: [HubCalendarComponent, EventTemplateDirective, DayCellTemplateDirective]
+})
+export class AgendaComponent {}
+```
 
 ## [22.4.0] - 2026-07-07
 
@@ -32,31 +54,33 @@ If you override any of the removed shorthand tokens, replace each one with the c
 
 If you never overrode these tokens, no action is required.
 
+## [22.0.0] - 2026-03-10
+
+### `base.scss` renamed to `calendar.scss`
+
+- **Change**: the global stylesheet `src/lib/styles/base.scss` was renamed to `src/lib/styles/calendar.scss`.
+- **Impact**: a `@use` pointing at the old file name no longer resolves.
+- **Migration**: none is needed from 21.1.1 onwards — the stylesheet is co-located with the component and
+  bundled through `styleUrl`, so no manual import exists to update. The only stylesheet a consumer still
+  `@use`s is the theming entry, `ng-hub-ui-calendar/styles` (see 22.4.0).
+
 ## Version 21.0.0
 
-### SCSS Variables Standardization & File Rename
+### SCSS Variables Standardization
 
 All SCSS custom properties used for overriding `hub-calendar` tokens have been renamed to conform to the ecosystem's strictest naming conventions. The previous namespace strategy used a mix of local variable inclusions that would compile as `--calendar-*` or simply the base element.
 
 All variables have been consolidated to use the strict prefix format `--hub-calendar-*`.
 Additionally, all variables are now properly backed by the ecosystem fallback properties (e.g. `var(--hub-sys-surface-elevated)`).
 
-Furthermore, the base SCSS file has been renamed from `base.scss` to `calendar.scss`.
-
 **Migration Steps:**
 
-1. **Update Import Path:**
-   If you were compiling or importing local styles using:
-   `@use 'ng-hub-ui-calendar/src/lib/styles/base.scss';`
-   You must update your import path to:
-   `@use 'ng-hub-ui-calendar/src/lib/styles/calendar.scss';`
-
-2. **Update Variable Names:**
-   If you override the default variables, you must rename them in your CSS/SCSS selectors pointing to `hub-calendar`.
-   For instance:
+**Update Variable Names:**
+If you override the default variables, you must rename them in your CSS/SCSS selectors pointing to `hub-calendar`.
+For instance:
 
 - `var(--calendar-bg)` becomes `var(--hub-calendar-bg)`
 - `var(--calendar-month-card-padding)` becomes `var(--hub-calendar-month-card-padding)`
 - `var(--calendar-day-hover-bg)` becomes `var(--hub-calendar-day-hover-bg)`
 
-For a complete list of exactly 37 new variable aliases supporting `ng-hub-ui-calendar`, please consult `./docs/css-variables-reference.md`.
+For the complete list of `--hub-calendar-*` variables, consult [`./docs/css-variables-reference.md`](./docs/css-variables-reference.md).

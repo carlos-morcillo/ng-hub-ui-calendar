@@ -230,7 +230,7 @@ export class DragDropComponent {
 import { CalendarConfig, CalendarViewType } from 'ng-hub-ui-calendar';
 
 @Component({
-	template: ` <hub-calendar [events]="events()" [config]="calendarConfig" [weekStartsOn]="1"> </hub-calendar> `
+	template: ` <hub-calendar [events]="events()" [config]="calendarConfig"> </hub-calendar> `
 })
 export class ConfigurationComponent {
 	calendarConfig: CalendarConfig = {
@@ -257,24 +257,29 @@ export class ConfigurationComponent {
 export class I18nComponent {}
 
 // With HubTranslationService
-// Add calendar translations to your i18n files:
+// Add calendar translations to your i18n files under HUBUI.CALENDAR:
 // {
-//   "calendar": {
-//     "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-//     "months": ["January", "February", ...],
-//     "today": "Today",
-//     "previous": "Previous",
-//     "next": "Next"
+//   "HUBUI": {
+//     "CALENDAR": {
+//       "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+//       "months": ["January", "February", ...],
+//       "today": "Today",
+//       "previous": "Previous",
+//       "next": "Next",
+//       "moreEvents": "+{count} more",
+//       "eventCount": "{count} events"
+//     }
 //   }
 // }
 ```
 
 #### Transloco and ngx-translate
 
-Calendar reads its `calendar` dictionary from `HubTranslationService`. Configure `provideHubTranslationAdapter()` once in `app.config.ts` with the complete active dictionary, then bind the active language to `locale`. Calendar now redraws when that provider emits.
+Calendar reads its dictionary from `HubTranslationService`, looking under `HUBUI.CALENDAR.*` first and falling back to the legacy top-level `calendar.*` branch (since 22.6.0). Prefer `HUBUI.CALENDAR.*`: it keeps the calendar from reserving a top-level `calendar` key in your application dictionary. Configure `provideHubTranslationAdapter()` once in `app.config.ts` with the complete active dictionary, then bind the active language to `locale`. Calendar redraws when that provider emits.
 
 ```typescript
-// The adapter source emits { calendar: { ... } } whenever the external language changes.
+// The adapter source emits { HUBUI: { CALENDAR: { ... } } } whenever the external language changes.
+// A dictionary still shaped as { calendar: { ... } } keeps working as the fallback.
 // Also update [locale] with the active language code.
 ```
 
@@ -333,19 +338,20 @@ export class EventHandlingComponent {
 | `selectedDate` | `Date`               | `new Date()` | Selected/focused date (two-way bindable) |
 | `config`       | `CalendarConfig`     | `{}`         | Configuration options                    |
 | `eventClass`   | `string \| Function` | -            | CSS class(es) for events                 |
-| `weekStartsOn` | `0-6`                | `0`          | Day week starts on (0=Sunday)            |
+| `weekStartsOn` | `0-6`                | `config.weekStartsOn` | Day week starts on (0=Sunday); overrides `config.weekStartsOn` when set |
 | `locale`       | `string`             | `'en'`       | Language code for translations           |
-| `variant`      | `string`             | `'primary'`  | Semantic accent: `primary` / `success` / `danger` / `warning` / `info`, or any `--hub-sys-color-*` name |
+| `variant`      | `string`             | `'primary'`  | Semantic accent: `primary` / `secondary` / `success` / `danger` / `warning` / `info` / `neutral` / `light` / `dark`, or any `--hub-sys-color-*` name |
 
 ### Outputs
 
-| Output       | Type                               | Description                              |
-| ------------ | ---------------------------------- | ---------------------------------------- |
-| `eventClick` | `CalendarEvent`                    | Emitted when an event is clicked         |
-| `dayClick`   | `CalendarDay`                      | Emitted when a day cell is clicked       |
-| `eventDrop`  | `{ event, newDate, previousDate }` | Emitted when an event is dropped         |
-| `viewChange` | `CalendarViewType`                 | Emitted when view type changes           |
-| `dateChange` | `Date`                             | Emitted when navigation changes the date |
+| Output               | Type                               | Description                                                        |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------ |
+| `eventClick`         | `CalendarEvent`                    | Emitted when an event is clicked                                    |
+| `dayClick`           | `CalendarDay`                      | Emitted when a day cell is clicked                                  |
+| `eventDrop`          | `{ event, newDate, previousDate }` | Emitted when an event is dropped on another day                     |
+| `viewChange`         | `CalendarViewType`                 | Emitted when the view type changes — the `[(view)]` half of `model` |
+| `selectedDateChange` | `Date`                             | Emitted when the selected day changes — the `[(selectedDate)]` half |
+| `dateChange`         | `Date`                             | Emitted when navigation changes the displayed period                |
 
 ### Interfaces
 
@@ -406,7 +412,7 @@ Full CSS variable catalog:
 
 ### Semantic Accent
 
-The `variant` input re-bases a single accent token, `--hub-calendar-accent`, which drives the today / selected day, the active view button and the event chips. The built-in values (`primary` / `success` / `danger` / `warning` / `info`) map to the design-system color families; any other string is read as `--hub-sys-color-<variant>`.
+The `variant` input re-bases a single accent token, `--hub-calendar-accent`, which drives the today / selected day, the active view button and the event chips. The nine built-in values (`primary` / `secondary` / `success` / `danger` / `warning` / `info` / `neutral` / `light` / `dark`) map to the design-system color families through the library stylesheet, so a rule of your own can re-point any of them; any other string is read inline as `--hub-sys-color-<variant>`.
 
 ```html
 <hub-calendar variant="success" [events]="events()"></hub-calendar>

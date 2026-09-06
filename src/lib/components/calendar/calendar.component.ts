@@ -8,6 +8,7 @@ import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
 	afterNextRender,
+	ChangeDetectionStrategy,
 	Component,
 	computed,
 	contentChild,
@@ -63,11 +64,22 @@ import { CalendarConfig, CalendarViewType, DEFAULT_CALENDAR_CONFIG } from '../..
  * ```
  */
 /** Variants with exact design-system token coverage via the SCSS `@each` loop. */
-const CALENDAR_BUILT_IN_VARIANTS = new Set<string>(['primary', 'success', 'danger', 'warning', 'info']);
+const CALENDAR_BUILT_IN_VARIANTS = new Set<string>([
+	'primary',
+	'secondary',
+	'success',
+	'danger',
+	'warning',
+	'info',
+	'neutral',
+	'light',
+	'dark'
+]);
 
 @Component({
 	selector: 'hub-calendar',
 	standalone: true,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [DatePipe, NgTemplateOutlet, HubOverflowTooltipDirective],
 	templateUrl: './calendar.component.html',
 	styleUrl: './calendar.component.scss',
@@ -107,16 +119,18 @@ export class HubCalendarComponent<T = any> {
 	// =========================================================================
 
 	/**
-	 * Semantic accent of the calendar: `'primary'` · `'success'` · `'danger'` ·
-	 * `'warning'` · `'info'`, or any custom string (read as `--hub-sys-color-<variant>`).
+	 * Semantic accent of the calendar: `'primary'` · `'secondary'` · `'success'` · `'danger'` ·
+	 * `'warning'` · `'info'` · `'neutral'` · `'light'` · `'dark'`, or any custom string
+	 * (read as `--hub-sys-color-<variant>`).
 	 * Re-bases `--hub-calendar-accent`, which drives the today / selected day, the
 	 * active view button and the event chips. Defaults to primary.
 	 */
 	readonly variant = input<string>();
 
 	/**
-	 * Inline accent for custom (non-built-in) variants — the built-in five are
-	 * resolved by the SCSS `@each` loop, so this returns `null` for them.
+	 * Inline accent for custom (non-built-in) variants — the nine canonical ones are
+	 * resolved by the SCSS `@each` loop, so this returns `null` for them and leaves a
+	 * consumer stylesheet free to re-point their accent.
 	 */
 	protected readonly customAccent = computed(() => {
 		const v = this.variant();
@@ -157,10 +171,10 @@ export class HubCalendarComponent<T = any> {
 
 	/**
 	 * Day the week starts on (0 = Sunday, 1 = Monday, etc.).
-	 * Overrides config.weekStartsOn if provided.
-	 * @default 0
+	 * Overrides config.weekStartsOn if provided; left unset, the config decides.
+	 * @default undefined (falls back to `config.weekStartsOn`, itself 0 = Sunday)
 	 */
-	readonly weekStartsOn = input<0 | 1 | 2 | 3 | 4 | 5 | 6>(0);
+	readonly weekStartsOn = input<0 | 1 | 2 | 3 | 4 | 5 | 6 | undefined>(undefined);
 
 	/**
 	 * Language code for i18n.
@@ -241,12 +255,20 @@ export class HubCalendarComponent<T = any> {
 	}));
 
 	/**
-	 * Weekday labels based on weekStartsOn setting.
+	 * First day of the week every grid is built from. Resolving the input-over-config
+	 * precedence once keeps the two sources from drifting apart as views are added.
+	 */
+	protected readonly firstDayOfWeek = computed<0 | 1 | 2 | 3 | 4 | 5 | 6>(
+		() => this.weekStartsOn() ?? this.mergedConfig().weekStartsOn
+	);
+
+	/**
+	 * Weekday labels based on the resolved first day of the week.
 	 * Rotated to start from the configured first day.
 	 */
 	readonly weekdayLabels = computed(() => {
 		const i18n = this.getTranslation('weekdays') || CALENDAR_I18N['en']['weekdays'];
-		const start = this.weekStartsOn();
+		const start = this.firstDayOfWeek();
 		return [...i18n.slice(start), ...i18n.slice(0, start)];
 	});
 
@@ -256,7 +278,7 @@ export class HubCalendarComponent<T = any> {
 	 */
 	readonly weekdayFullLabels = computed(() => {
 		const i18n = this.getTranslation('weekdaysFull') || CALENDAR_I18N['en']['weekdaysFull'];
-		const start = this.weekStartsOn();
+		const start = this.firstDayOfWeek();
 		return [...i18n.slice(start), ...i18n.slice(0, start)];
 	});
 
@@ -321,6 +343,13 @@ export class HubCalendarComponent<T = any> {
 	 * Current day object for day view.
 	 */
 	readonly currentDay = computed<CalendarDay<T>>(() => this.generateDayView());
+
+	/**
+	 * Heading of the day view. Built from the calendar dictionary rather than `DatePipe`,
+	 * so it follows the `locale` input like every other label instead of the application's
+	 * `LOCALE_ID` — the two diverge as soon as a consumer localizes one calendar on its own.
+	 */
+	readonly currentDayLabel = computed(() => this.getDayAriaLabel(this.currentDay()));
 
 	/**
 	 * Months array for year view.
@@ -482,7 +511,38 @@ export class HubCalendarComponent<T = any> {
 	 */
 	getMonthAriaLabel(month: { date: Date; name: string; eventCount: number }): string {
 		const base = `${month.name} ${month.date.getFullYear()}`;
-		return month.eventCount > 0 ? `${base}, ${month.eventCount} events` : base;
+		return month.eventCount > 0 ? `${base}, ${this.getEventCountLabel(month.eventCount)}` : base;
+	}
+
+	/**
+	 * Short weekday name of a date, taken from the same dictionary the month-view headers use.
+	 * The week view read it off `DatePipe` instead, which answers to `LOCALE_ID` and ignores
+	 * the `locale` input.
+	 * @param date - The date whose weekday is being labelled
+	 * @returns Localized short weekday name (e.g. "Wed")
+	 */
+	getWeekdayLabel(date: Date): string {
+		const weekdays = this.getTranslation('weekdays') || CALENDAR_I18N['en']['weekdays'];
+		return weekdays[date.getDay()];
+	}
+
+	/**
+	 * Localized "+N more" chip shown when a day cell holds more events than it can render.
+	 * @param count - How many events are hidden
+	 * @returns Localized overflow label
+	 */
+	getMoreEventsLabel(count: number): string {
+		return this.countLabel('moreEvents', count);
+	}
+
+	/**
+	 * Localized event count of a year-view month card, used both as visible text and inside
+	 * the card's accessible name.
+	 * @param count - How many events the month holds
+	 * @returns Localized count label
+	 */
+	getEventCountLabel(count: number): string {
+		return this.countLabel('eventCount', count);
 	}
 
 	// =========================================================================
@@ -732,6 +792,17 @@ export class HubCalendarComponent<T = any> {
 	}
 
 	/**
+	 * One localized string carrying a `{count}` placeholder. Keeping the number inside the
+	 * template string is what lets a locale move it, drop the `+` sign or add a word after it.
+	 * @param key - The translation key
+	 * @param count - The number to interpolate
+	 * @returns The localized label with the count substituted
+	 */
+	private countLabel(key: string, count: number): string {
+		return this.label(key).replace(/\{count\}/g, String(count));
+	}
+
+	/**
 	 * Gets a translation for the given key.
 	 * Uses HubTranslationService if available, falls back to CALENDAR_I18N.
 	 * @param key - The translation key (e.g., 'weekdays', 'months')
@@ -769,7 +840,7 @@ export class HubCalendarComponent<T = any> {
 		const month = date.getMonth();
 		const firstDay = new Date(year, month, 1);
 		const lastDay = new Date(year, month + 1, 0);
-		const startOffset = (firstDay.getDay() - this.weekStartsOn() + 7) % 7;
+		const startOffset = (firstDay.getDay() - this.firstDayOfWeek() + 7) % 7;
 		const weeks: CalendarWeek<T>[] = [];
 
 		let currentDate = new Date(firstDay);
@@ -806,7 +877,7 @@ export class HubCalendarComponent<T = any> {
 	private generateWeekDays(): CalendarDay<T>[] {
 		const date = this.selectedDate();
 		const start = new Date(date);
-		const dayOffset = (start.getDay() - this.weekStartsOn() + 7) % 7;
+		const dayOffset = (start.getDay() - this.firstDayOfWeek() + 7) % 7;
 		start.setDate(start.getDate() - dayOffset);
 
 		const days: CalendarDay<T>[] = [];
@@ -921,13 +992,13 @@ export class HubCalendarComponent<T = any> {
 
 	/**
 	 * Returns the first day of the week containing the given date,
-	 * honoring the `weekStartsOn` input.
+	 * honoring the resolved first day of the week.
 	 * @param date - The reference date (not mutated)
 	 * @returns The first day of that week
 	 */
 	private startOfWeek(date: Date): Date {
 		const d = new Date(date);
-		const offset = (d.getDay() - this.weekStartsOn() + 7) % 7;
+		const offset = (d.getDay() - this.firstDayOfWeek() + 7) % 7;
 		d.setDate(d.getDate() - offset);
 		return d;
 	}

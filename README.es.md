@@ -223,7 +223,7 @@ export class DragDropComponent {
 import { CalendarConfig, CalendarViewType } from 'ng-hub-ui-calendar';
 
 @Component({
-	template: ` <hub-calendar [events]="events()" [config]="calendarConfig" [weekStartsOn]="1"> </hub-calendar> `
+	template: ` <hub-calendar [events]="events()" [config]="calendarConfig"> </hub-calendar> `
 })
 export class ConfigurationComponent {
 	calendarConfig: CalendarConfig = {
@@ -250,24 +250,29 @@ export class ConfigurationComponent {
 export class I18nComponent {}
 
 // Con HubTranslationService
-// Añade traducciones del calendario a tus archivos i18n
+// Añade traducciones del calendario a tus archivos i18n bajo HUBUI.CALENDAR:
 // {
-//   "calendar": {
-//     "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-//     "months": ["January", "February", ...],
-//     "today": "Today",
-//     "previous": "Previous",
-//     "next": "Next"
+//   "HUBUI": {
+//     "CALENDAR": {
+//       "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+//       "months": ["January", "February", ...],
+//       "today": "Today",
+//       "previous": "Previous",
+//       "next": "Next",
+//       "moreEvents": "+{count} more",
+//       "eventCount": "{count} events"
+//     }
 //   }
 // }
 ```
 
 #### Transloco y ngx-translate
 
-Calendar lee el diccionario `calendar` desde `HubTranslationService`. Configura `provideHubTranslationAdapter()` una sola vez en `app.config.ts` con el diccionario activo completo y vincula el idioma activo a `locale`. Calendar se vuelve a renderizar cuando el proveedor emite.
+Calendar lee su diccionario desde `HubTranslationService`: busca primero bajo `HUBUI.CALENDAR.*` y recurre a la rama heredada `calendar.*` de nivel superior (desde 22.6.0). Usa preferentemente `HUBUI.CALENDAR.*`, porque así el calendario no reserva una clave `calendar` de nivel superior en el diccionario de la aplicación. Configura `provideHubTranslationAdapter()` una sola vez en `app.config.ts` con el diccionario activo completo y vincula el idioma activo a `locale`. Calendar se vuelve a renderizar cuando el proveedor emite.
 
 ```typescript
-// La fuente del adaptador emite { calendar: { ... } } al cambiar el idioma externo.
+// La fuente del adaptador emite { HUBUI: { CALENDAR: { ... } } } al cambiar el idioma externo.
+// Un diccionario con la forma { calendar: { ... } } sigue funcionando como respaldo.
 // Actualiza también [locale] con el código del idioma activo.
 ```
 
@@ -326,19 +331,20 @@ export class EventHandlingComponent {
 | `selectedDate` | `Date`               | `new Date()` | Fecha seleccionada/foco (enlazable en dos direcciones) |
 | `config`       | `CalendarConfig`     | `{}`         | Opciones de configuración                              |
 | `eventClass`   | `string \| Function` | -            | Clase(s) CSS para eventos                              |
-| `weekStartsOn` | `0-6`                | `0`          | Día en que comienza la semana (0=Domingo)              |
+| `weekStartsOn` | `0-6`                | `config.weekStartsOn` | Día en que comienza la semana (0=Domingo); prevalece sobre `config.weekStartsOn` cuando se indica |
 | `locale`       | `string`             | `'en'`       | Código de idioma para traducciones                     |
-| `variant`      | `string`             | `'primary'`  | Acento semántico: `primary` / `success` / `danger` / `warning` / `info`, o cualquier nombre `--hub-sys-color-*` |
+| `variant`      | `string`             | `'primary'`  | Acento semántico: `primary` / `secondary` / `success` / `danger` / `warning` / `info` / `neutral` / `light` / `dark`, o cualquier nombre `--hub-sys-color-*` |
 
 ### Outputs
 
-| Output       | Tipo                               | Descripción                                     |
-| ------------ | ---------------------------------- | ----------------------------------------------- |
-| `eventClick` | `CalendarEvent`                    | Emitido cuando se hace clic en un evento        |
-| `dayClick`   | `CalendarDay`                      | Emitido cuando se hace clic en una celda de día |
-| `eventDrop`  | `{ event, newDate, previousDate }` | Emitido cuando se suelta un evento              |
-| `viewChange` | `CalendarViewType`                 | Emitido cuando cambia el tipo de vista          |
-| `dateChange` | `Date`                             | Emitido cuando la navegación cambia la fecha    |
+| Output               | Tipo                               | Descripción                                                              |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------ |
+| `eventClick`         | `CalendarEvent`                    | Emitido cuando se hace clic en un evento                                  |
+| `dayClick`           | `CalendarDay`                      | Emitido cuando se hace clic en una celda de día                           |
+| `eventDrop`          | `{ event, newDate, previousDate }` | Emitido cuando se suelta un evento en otro día                            |
+| `viewChange`         | `CalendarViewType`                 | Emitido cuando cambia el tipo de vista — la mitad `[(view)]` del `model`  |
+| `selectedDateChange` | `Date`                             | Emitido cuando cambia el día seleccionado — la mitad `[(selectedDate)]`   |
+| `dateChange`         | `Date`                             | Emitido cuando la navegación cambia el periodo mostrado                   |
 
 ### Interfaces
 
@@ -399,7 +405,7 @@ Catálogo completo de variables CSS:
 
 ### Acento Semántico
 
-El input `variant` re-basa un único token de acento, `--hub-calendar-accent`, que controla el día de hoy / día seleccionado, el botón de vista activo y las píldoras de eventos. Los valores integrados (`primary` / `success` / `danger` / `warning` / `info`) se asignan a las familias de color del sistema de diseño; cualquier otra cadena se lee como `--hub-sys-color-<variant>`.
+El input `variant` re-basa un único token de acento, `--hub-calendar-accent`, que controla el día de hoy / día seleccionado, el botón de vista activo y las píldoras de eventos. Los nueve valores integrados (`primary` / `secondary` / `success` / `danger` / `warning` / `info` / `neutral` / `light` / `dark`) se asignan a las familias de color del sistema de diseño desde la hoja de estilos de la librería, de modo que una regla propia puede re-apuntar cualquiera de ellos; cualquier otra cadena se lee en línea como `--hub-sys-color-<variant>`.
 
 ```html
 <hub-calendar variant="success" [events]="events()"></hub-calendar>
